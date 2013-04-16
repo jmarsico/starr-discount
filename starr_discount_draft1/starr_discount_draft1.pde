@@ -1,25 +1,23 @@
-Circle circle;
+int numCircles = 29;
+Circle[] circles = new Circle[numCircles];
 
-
-PVector location;
-float circ1 = 5;
-float circ2 = 10;
-float circ3 = 12;
-float circ4 = 13;
 
 void setup(){
+  frameRate(30);
   size(600, 600);
-  
-
-  circle = new Circle();
+  for(int i =0; i < circles.length; i ++){
+  circles[i] = new Circle();
+  }
 }
 
 
 void draw(){
   background(255);
  
- circle.display();
- circle.update();
+ for(int i = 0; i < circles.length; i++){
+ circles[i].update();
+ circles[i].display();
+ }
  
 }
   
