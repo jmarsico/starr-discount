@@ -4,6 +4,7 @@ class Circle{
   float rad;
   float strokewt;
   float pulseRate;
+  int spacing = 18;
   
   
   Circle(){
@@ -32,11 +33,22 @@ class Circle{
    //draw the circle object
   void display(){
    
-    
+   //circle of circles 
+  fill(0);
+  noStroke();
+  for (int deg = 0; deg < 360; deg += spacing){
+    float angle = radians(deg);
+    float x = location.x + (cos(angle) * rad);
+    float y = location.y + (sin(angle) * rad);
+    ellipse(x, y, rad-10, rad-10); 
+  }
+  
+  //inner circle
    fill(0, 30);
    noStroke();
    ellipse(location.x, location.y, rad, rad);
   
+  //rings
    noFill();
    stroke(1);
    ellipse(location.x, location.y, rad + 10, rad + 10);

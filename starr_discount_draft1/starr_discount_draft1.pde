@@ -4,7 +4,7 @@ Circle[] circles = new Circle[numCircles];
 
 void setup(){
   frameRate(30);
-  size(600, 600);
+  size(displayWidth, displayHeight);
   for(int i =0; i < circles.length; i ++){
   circles[i] = new Circle();
   }
