@@ -39,7 +39,7 @@ class Circle {
       float angle = radians(deg);
       float x = location.x + (cos(angle) * rad);
       float y = location.y + (sin(angle) * rad);
-      ellipse(x, y, 5, 5);
+      ellipse(x, y, 5, 5 );
     }
 
     //inner circle

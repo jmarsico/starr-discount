@@ -1,44 +1,45 @@
-int numCircles = 40;
+int numCircles = 100;
 Circle[] circles = new Circle[numCircles];
 
 
-void setup(){
+void setup() {
   frameRate(30);
   size(displayWidth, displayHeight);
-  for(int i =0; i < circles.length; i ++){
-  circles[i] = new Circle();
+  for (int i =0; i < circles.length; i ++) {
+    circles[i] = new Circle();
   }
 }
 
 
-void draw(){
- background(234,142,115);
+
+void draw() {
+  background(234, 142, 115);
+
+
+  // this is colored perlin noise gradient background
  /*
- float inc = 0.06;
- int density = 1;
- float znoise = 0.0;
- float xnoise = 0.0;
- float ynoise = 0.0;
- for (int y = 0; y < height; y += density){
-   for (int x = 0; x < width; x += density){
-     float n = noise(xnoise, ynoise, znoise) *256;
-     fill(n, 70);
-     rect(x,y,density,density);
-     xnoise += inc;
+ loadPixels();
+   float xoff = 0.0;
+   
+   for (int x = 0; x < width; x++){
+   float yoff = 0.0;
+   
+   for(int y = 0; y < height; y++){
+   float bright = map(noise(xoff,yoff), 0, 1, 0, 255);
+   pixels[x+y*width] = color(234, 145, bright, 10);
+   yoff += 0.001;
    }
-   xnoise = 0;
-   ynoise += inc;
- }
- znoise += inc;
- 
- */
- 
- for(int i = 0; i < circles.length; i++){
- circles[i].update();
- circles[i].display();
- }
- 
+   xoff += 0.001;
+   }
+   
+   updatePixels();
+*/   
+
+  for (int i = 0; i < circles.length; i++) {
+    circles[i].update();
+    circles[i].display();
+  }
 }
-  
-  
-  
+
+
+
