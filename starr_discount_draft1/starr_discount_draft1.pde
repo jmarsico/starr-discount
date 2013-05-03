@@ -1,4 +1,4 @@
-int numCircles = 100;
+int numCircles = 30;
 Circle[] circles = new Circle[numCircles];
 
 
@@ -13,7 +13,7 @@ void setup() {
 
 
 void draw() {
-  background(234, 142, 115);
+  background(0);
 
 
   // this is colored perlin noise gradient background
