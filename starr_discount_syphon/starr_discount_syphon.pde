@@ -1,10 +1,16 @@
-int numCircles = 100;
+import codeanticode.syphon.*;
+
+int numCircles = 10;
 Circle[] circles = new Circle[numCircles];
+PGraphics pg;
+SyphonServer server;
 
 
 void setup() {
-  frameRate(30);
-  size(displayWidth, displayHeight);
+ // frameRate(30);
+  size(640, 480, P2D);
+  pg = createGraphics(width, height, P2D);
+  server = new SyphonServer(this, "Processing Starr");
   for (int i =0; i < circles.length; i ++) {
     circles[i] = new Circle();
   }
@@ -13,7 +19,15 @@ void setup() {
 
 
 void draw() {
-  background(234, 142, 115);
+  //background(234, 142, 115);
+  
+  pg.beginDraw();
+  renderImage();
+  pg.endDraw();
+  image(pg,640,480);
+  server.sendImage(pg);
+}
+
 
 
   // this is colored perlin noise gradient background
@@ -35,10 +49,16 @@ void draw() {
    updatePixels();
 */   
 
+  
+
+
+void renderImage(){
+  pg.fill(234, 142, 115);
+  pg.rect(0,0,1280,960);
+  
   for (int i = 0; i < circles.length; i++) {
     circles[i].update();
     circles[i].display();
-    circles[i].checkEdges();
   }
 }
 

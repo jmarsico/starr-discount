@@ -33,44 +33,39 @@ class Circle {
   void display() {
     
     //circle of circles 
-    fill(0);
-    noStroke();
+    pg.fill(0);
+    pg.noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float angle = radians(deg);
       float x = location.x + (cos(angle) * rad);
       float y = location.y + (sin(angle) * rad);
-      ellipse(x, y, 5, 5 );
+      pg.ellipse(x, y, 5, 5 );
     }
 
-    //inner circle
-    fill(0, 30);
-    noStroke();
-    ellipse(location.x, location.y, rad, rad);
+    pg.fill(0, 30);
+    pg.noStroke();
+    pg.ellipse(location.x, location.y, rad, rad);
 
     //rings
-    noFill();
-    stroke(1);
-    ellipse(location.x, location.y, rad + 10, rad + 10);
-    strokeWeight(strokewt);
-    ellipse(location.x, location.y, rad + 12, rad + 12);
+    pg.noFill();
+    pg.stroke(1);
+    pg.ellipse(location.x, location.y, rad + 10, rad + 10);
 
-    strokeWeight(strokewt);
-    ellipse(location.x, location.y, rad + 16, rad +16);
+    pg.strokeWeight(strokewt);
 
-    strokeWeight(strokewt);
-    ellipse(location.x, location.y, rad + 30, rad + 30);
+    pg.ellipse(location.x, location.y, rad + 12, rad + 12);
 
-    strokeWeight(strokewt);
-    ellipse(location.x, location.y, rad + 45, rad + 45);
+    pg.strokeWeight(strokewt);
+
+    pg.ellipse(location.x, location.y, rad + 16, rad +16);
+
+    pg.strokeWeight(strokewt);
+
+    pg.ellipse(location.x, location.y, rad + 30, rad + 30);
+
+    pg.strokeWeight(strokewt);
+
+    pg.ellipse(location.x, location.y, rad + 45, rad + 45);
   }
-  
-  void checkEdges(){
-  if((location.x > width) || (location.x < 0)){
-    velocity.x*= -1;
-  }
-  if((location.y > height) || (location.y < 0)){
-    velocity.y *= -1;
-  }
-}
 }
 
