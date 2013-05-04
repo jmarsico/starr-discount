@@ -16,7 +16,7 @@ class Circle {
   Circle() {
 
     float radX = 20;
-    float radY = radX * random(2, 10);
+    float radY = 20;
     float x = random(100, width - 100);
     float y = random(100, height - 100);
     location = new PVector(x, y);
