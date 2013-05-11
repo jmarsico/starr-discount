@@ -1,4 +1,4 @@
-int numCircles = 30;
+int numCircles = 32;
 Circle[] circles = new Circle[numCircles];
 
 
