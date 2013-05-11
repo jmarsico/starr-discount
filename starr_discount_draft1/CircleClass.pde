@@ -6,7 +6,6 @@ class Circle {
   float aVelocity = 0;
   float aAcceleration = 0.01;
   float radX;
-  float radY;
   float strokewt;
   float pulseRate;
   int spacing = 18;
@@ -16,7 +15,6 @@ class Circle {
   Circle() {
 
     float radX = 20;
-    float radY = 20;
     float x = random(100, width - 100);
     float y = random(100, height - 100);
     location = new PVector(x, y);
@@ -77,24 +75,24 @@ class Circle {
     //inner circle
     fill(0, 30);
     noStroke();
-    ellipse(0, 0, radX, radY);
+    ellipse(0, 0, radX, radX);
 
     //rings
     noFill();
     stroke(255);
-    ellipse(0, 0, radX + 10, radY + 10);
+    ellipse(0, 0, radX + 10, radX + 10);
     
     strokeWeight(strokewt);
-    ellipse(0, 0, radX + 12, radY + 12);
+    ellipse(0, 0, radX + 12, radX + 12);
 
     strokeWeight(strokewt);
-    ellipse(0, 0, radX + 16, radY +16);
+    ellipse(0, 0, radX + 16, radX +16);
 
     strokeWeight(strokewt);
-    ellipse(0, 0, radX + 30, radY + 30);
+    ellipse(0, 0, radX + 30, radX + 30);
 
     strokeWeight(strokewt);
-    ellipse(0, 0, radX + 45, radY + 45);
+    ellipse(0, 0, radX + 45, radX + 45);
     popMatrix();
   }
   
