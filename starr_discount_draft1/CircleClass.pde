@@ -100,10 +100,10 @@ class Circle {
   
   void checkEdges(){
   if((location.x > width) || (location.x < 0)){
-    velocity.x*= -1;
+    velocity.x*= -0.5;
   }
   if((location.y > height) || (location.y < 0)){
-    velocity.y *= -1;
+    velocity.y *= -0.8;
   }
 }
 }
