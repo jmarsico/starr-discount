@@ -7,7 +7,7 @@ VerletPhysics2D physics;
 
 
 ArrayList<Circle> circles;   //initiate an ArrayList of Circle objects
-int numCircles = 30;         // number of circle objects
+int numCircles = 1;         // number of circle objects
 
 
 void setup() {
@@ -19,8 +19,17 @@ void setup() {
 
   //create the circles
   circles = new ArrayList<Circle>();
-  for (int i = 0; int < circles.length; int ++) {
-    circles.add(new Circle());
+  for (int i = 0; i < numCircles; i ++) {
+    circles.add(new Circle(new Vec2D(random(100, width - 100), random(100, height - 100))));
+  }
+}
+
+
+void draw(){
+  background(0);
+  for (Circle c: circles) {
+    c.update();
+    c.display();
   }
 }
 
