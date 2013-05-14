@@ -8,7 +8,7 @@ class Circle {
   float radX;
   float strokewt;
   float pulseRate;
-  int spacing = 18;
+  float spacing = 8;
 
 
   //initiate the object
