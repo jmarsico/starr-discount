@@ -7,7 +7,7 @@ VerletPhysics2D physics;
 
 
 ArrayList<Circle> circles;   //initiate an ArrayList of Circle objects
-int numCircles = 10;         // number of circle objects
+int numCircles = 100;         // number of circle objects
 
 
 void setup() {
@@ -31,18 +31,10 @@ void draw(){
   physics.update ();
   //for list with ArrayList
   for (Circle c: circles) { 
-    //c.update();
+    c.checkEdges();
     c.display();
   }
-  
-  for(Circle c: circles){
-  if (mousePressed) {
-    
-    c.lock();
-    c.set(mouseX,mouseY);
-  } else {
-    c.unlock();
-  }
-  }
 }
+  
+  
 
