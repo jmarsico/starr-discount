@@ -1,8 +1,8 @@
 
 /* 
-this circle is based on a VerletParticle from toxiclibs VerletPhysics2D library. this means
-we can call any function from the VerletParticle class from the main program.
-*/
+ this circle is based on a VerletParticle from toxiclibs VerletPhysics2D library. this means
+ we can call any function from the VerletParticle class from the main program.
+ */
 
 
 class Circle extends VerletParticle2D {
@@ -22,25 +22,25 @@ class Circle extends VerletParticle2D {
     physics.addParticle(this);
     pulseRate = random(6, 10);
   }
-  
-  
-  void circUpdate(){
+
+
+  void circUpdate() {
     r = r + sin(frameCount/pulseRate);
   }
 
   void display() {
     fill(255);
-    ellipse(x,y,5,5);
-    
-    fill(255,100);
-   noStroke();
-    for (int deg = 0; deg < 360; deg += spacing){
+    ellipse(x, y, 5, 5);
+
+    fill(255, 100);
+    noStroke();
+    for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
       float _x = x + (cos(ringAngle) * r);
       float _y = y + (sin(ringAngle) * r);
       ellipse(_x, _y, 5, 5);
     }
-    
+
     //physics.update();
   }
 }
