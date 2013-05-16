@@ -1,40 +1,40 @@
 class Circle extends VerletParticle2D {
 
-  AttractionBehavior circBehav;
-
+  float angle = 0;
+  float aVelocity = 0;
+  float aAcceleration = 0.01;
   float r;
-  Vec2D force, velocity;
-
+  float strokewt= 0.3;
+  float pulseRate;
+  float spacing = 20; 
 
 
   Circle(Vec2D loc) {
     super(loc);
-    r = 8;
-    circBehav = new AttractionBehavior(this, width, -1);
+    r = 20;
     physics.addParticle(this);
-   // physics.addBehavior(circBehav);
-    velocity = new Vec2D(random(-0.1,0.1), random(-0.1, 0.1));
+    pulseRate = random(6, 10);
   }
-
+  
+  
+  void circUpdate(){
+    r = r + sin(frameCount/pulseRate);
+  }
 
   void display() {
     fill(255);
-    this.addVelocity(velocity);
-   // physics.update();
-    ellipse(this.x, this.y, 5, 5);
+    ellipse(x,y,5,5);
+    
+    fill(255,100);
+   noStroke();
+    for (int deg = 0; deg < 360; deg += spacing){
+      float ringAngle = radians(deg);
+      float _x = x + (cos(ringAngle) * r);
+      float _y = y + (sin(ringAngle) * r);
+      ellipse(_x, _y, 5, 5);
+    }
+    
+    //physics.update();
   }
-  
-  void checkEdges(){
-    if((this.x > width) || (this.x < 0)){
-    velocity.x *=-1;
-  } else if ((this.y > height) || (this.y < 0)){
-    velocity.y *=-1;
-  }
-  }
- 
-
 }
- 
-
-
 
