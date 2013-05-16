@@ -52,8 +52,8 @@ void setup() {
   // not currently needed: sets the boundaries of the physics world
   //physics.setWorldBounds(new Rect(0, 0, width, height)); 
   physics.setDrag(0.03);                                         //drag force slows down gravity
-  physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.1)));   //adds gravity to particle system
-
+  physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.07)));   //adds gravity to particle system
+  
   //create the ArrayList of attractors
   attractors = new ArrayList<Attractor>();
   for (int i = 0; i < maxPeople; i ++) {
@@ -122,7 +122,7 @@ void draw() {
 void mousePressed() {
   mousePos = new Vec2D(mouseX, mouseY);
   // create a new positive attraction force field around the mouse position (radius=250px)
-  mouseAttractor = new AttractionBehavior(mousePos, width, 0.1f);
+  mouseAttractor = new AttractionBehavior(mousePos, width, 0.09f);
   physics.addBehavior(mouseAttractor);
 }
 
