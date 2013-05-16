@@ -1,3 +1,10 @@
+
+/* 
+this circle is based on a VerletParticle from toxiclibs VerletPhysics2D library. this means
+we can call any function from the VerletParticle class from the main program.
+*/
+
+
 class Circle extends VerletParticle2D {
 
   float angle = 0;
