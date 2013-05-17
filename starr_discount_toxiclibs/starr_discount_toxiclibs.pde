@@ -92,13 +92,37 @@ void draw() {
   }
 
 
-// **** experimental section *****
+  // **** experimental section *****
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
-  for (int i = attractors.size()-1; i < people.length -1; i++) {
+  for (int i = attractors.size(); i < people.length -1; i++) {
     TSPSPerson person = people[i];
     attractors.add(new Attractor(new Vec2D(person.centroid.x * width, 
     person.centroid.y * height)));
   }
+
+
+
+  // this section doesn't work
+  if (attractors.size() >= 0) {
+    for (int i = attractors.size()-1; i > people.length ; i--) {
+      attractors.remove(i);
+      ParticleBehavior2D b = physics.behaviors.get(i+1);
+      physics.removeBehavior(b);
+    }
+  }
+  
+
+
+  //debugging
+  println("people" + people.length); 
+  println("attractors" + attractors.size());
+  println("behaviors" + physics.behaviors.size()); 
+
+  fill(255,255);
+  text("people" + people.length, 10,10); 
+  text ("attractors: " + attractors.size(), 10,25);
+  text ("behaviors: " + physics.behaviors.size(), 10, 40);
+  text ("framerate: " + frameRate, 10, 55);
 }
 
 
@@ -121,24 +145,24 @@ void draw() {
 
 
 
-  //****these sections are for troubleshooting *********
+//****these sections are for troubleshooting *********
 
 
 
-  void mousePressed() {
-    mousePos = new Vec2D(mouseX, mouseY);
-    // create a new positive attraction force field around the mouse position (radius=250px)
-    mouseAttractor = new AttractionBehavior(mousePos, width, 0.09f);
-    physics.addBehavior(mouseAttractor);
-  }
+void mousePressed() {
+  mousePos = new Vec2D(mouseX, mouseY);
+  // create a new positive attraction force field around the mouse position (radius=250px)
+  mouseAttractor = new AttractionBehavior(mousePos, width, 0.09f);
+  physics.addBehavior(mouseAttractor);
+}
 
-  void mouseDragged() {
-    // update mouse attraction focal point
-    mousePos.set(mouseX, mouseY);
-  }
+void mouseDragged() {
+  // update mouse attraction focal point
+  mousePos.set(mouseX, mouseY);
+}
 
-  void mouseReleased() {
-    // remove the mouse attraction when button has been released
-    physics.removeBehavior(mouseAttractor);
-  }
+void mouseReleased() {
+  // remove the mouse attraction when button has been released
+  physics.removeBehavior(mouseAttractor);
+}
 
