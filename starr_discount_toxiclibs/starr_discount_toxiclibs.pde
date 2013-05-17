@@ -53,12 +53,10 @@ void setup() {
   //physics.setWorldBounds(new Rect(0, 0, width, height)); 
   physics.setDrag(0.03);                                         //drag force slows down gravity
   physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.07)));   //adds gravity to particle system
-  
+
   //create the ArrayList of attractors
   attractors = new ArrayList<Attractor>();
-  for (int i = 0; i < maxPeople; i ++) {
-    attractors.add(new Attractor(new Vec2D(0, 0)));
-  }
+
 
 
   //create the ArrayList of circles
@@ -66,7 +64,6 @@ void setup() {
   for (int i = 0; i < numCircles; i ++) {
     circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
   }
-
 }
 
 
@@ -93,6 +90,15 @@ void draw() {
       circles.remove(c);
     }
   }
+
+
+// **** experimental section *****
+  TSPSPerson[] people = tspsReceiver.getPeopleArray();
+  for (int i = attractors.size()-1; i < people.length -1; i++) {
+    TSPSPerson person = people[i];
+    attractors.add(new Attractor(new Vec2D(person.centroid.x * width, 
+    person.centroid.y * height)));
+  }
 }
 
 
@@ -115,25 +121,24 @@ void draw() {
 
 
 
-//****these sections are for troubleshooting *********
+  //****these sections are for troubleshooting *********
 
 
 
-void mousePressed() {
-  mousePos = new Vec2D(mouseX, mouseY);
-  // create a new positive attraction force field around the mouse position (radius=250px)
-  mouseAttractor = new AttractionBehavior(mousePos, width, 0.09f);
-  physics.addBehavior(mouseAttractor);
-}
+  void mousePressed() {
+    mousePos = new Vec2D(mouseX, mouseY);
+    // create a new positive attraction force field around the mouse position (radius=250px)
+    mouseAttractor = new AttractionBehavior(mousePos, width, 0.09f);
+    physics.addBehavior(mouseAttractor);
+  }
 
-void mouseDragged() {
-  // update mouse attraction focal point
-  mousePos.set(mouseX, mouseY);
-}
+  void mouseDragged() {
+    // update mouse attraction focal point
+    mousePos.set(mouseX, mouseY);
+  }
 
-void mouseReleased() {
-  // remove the mouse attraction when button has been released
-  physics.removeBehavior(mouseAttractor);
-}
-
+  void mouseReleased() {
+    // remove the mouse attraction when button has been released
+    physics.removeBehavior(mouseAttractor);
+  }
 
