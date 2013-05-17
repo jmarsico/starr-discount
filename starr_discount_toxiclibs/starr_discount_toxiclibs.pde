@@ -1,18 +1,8 @@
 
 /*
- ********  NOTES  ********
- 
- when working within the people array, add behaviors  to the object
- directly from the array "physics.removeBehaviors...."
- 
- try this link for setting strength: 
- http://forum.processing.org/topic/toxiclibs-adjusting-a-behavior-within-a-live-particle-system-using-setstrength
- 
- also... watch these shiffman videos on toxiclibs verletphysics:
- https://vimeo.com/62395895
- 
+before running, open OpenTSPS application and set 
+ background, desired threshold, etc. 
  */
-
 
 import toxi.physics2d.*;
 import toxi.physics2d.behaviors.*;
@@ -23,7 +13,7 @@ import tsps.*;
 VerletPhysics2D physics;      //initiate instance of physics library
 TSPS tspsReceiver;            //initiate instance of TSPS library
 
-//used for timer 
+//used for timed Circle object generator
 int lastTimeCheck;
 int timeIntervalFlag = 50;
 
@@ -31,16 +21,12 @@ int timeIntervalFlag = 50;
 Vec2D mousePos;
 AttractionBehavior mouseAttractor;
 
-//might want to have a generic AttractionBehavior that can be added 
-// or removed from each particle
-AttractionBehavior personAttractor;   
 
 ArrayList<Circle> circles;   //initiate an ArrayList of Circle objects
 int numCircles = 10;         // number of Circle objects
 
 ArrayList<Attractor> attractors;   //provision an ArrayList of Attractor objects
 int maxPeople = 10;                // maximum number of people in the attractors ArrayList
-
 
 
 
@@ -101,41 +87,36 @@ void draw() {
     Attractor a = attractors.get(i);
     a.lock();
     a.set(personAtt.x, personAtt.y);
-   
   }
 
   for (int i = 0; i < attractors.size(); i ++) {
     Attractor a = attractors.get(i);
     a.display();
-   // a.update();
+    // a.update();
   }
 
-if(attractors.size() > 0){
-for(int i = 0; i < people.length-1; i++){
-  TSPSPerson person = people[i];
-  Attractor a = attractors.get(i);
-  //a.lock();
-  a.set(person.centroid.x * width, person.centroid.y * height);
-}
-}
-  // this section doesn't work
-  if (attractors.size() >= 0) {
-    for (int i = attractors.size()-1; i > people.length +1; i--) {
-   //  Attractor a = attractors.get(i);
-    // a.deleteBehave();
-     attractors.remove(i);
+  if (attractors.size() > 0) {
+    for (int i = 0; i < people.length-1; i++) {
+      TSPSPerson person = people[i];
+      Attractor a = attractors.get(i);
+      //a.lock();
+      a.set(person.centroid.x * width, person.centroid.y * height);
     }
   }
   
-  if(people.length == 0){
-    for(int i = physics.behaviors.size()-1; i > 1  ; i --){
+  //playing it safe to clear out all attractors
+  if (attractors.size() >= 0) {
+    for (int i = attractors.size()-1; i > people.length +1; i--) {
+      attractors.remove(i);
+    }
+  }
+
+  //playing it safe to clear out all behaviors (except gravity)
+  if (people.length == 0) {
+    for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
       ParticleBehavior2D b = physics.behaviors.get(i);
       physics.removeBehavior(b);
-      
-      
-    }
-    
-    
+    }  
     attractors.clear();
   }
 
