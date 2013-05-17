@@ -1,5 +1,5 @@
-/*
 
+/*
  ********  NOTES  ********
  
  when working within the people array, add behaviors  to the object
@@ -96,21 +96,49 @@ void draw() {
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
   for (int i = attractors.size(); i < people.length -1; i++) {
     TSPSPerson person = people[i];
-    attractors.add(new Attractor(new Vec2D(person.centroid.x * width, 
-    person.centroid.y * height)));
+    Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height); 
+    attractors.add(new Attractor(personAtt));
+    Attractor a = attractors.get(i);
+    a.lock();
+    a.set(personAtt.x, personAtt.y);
+   
   }
 
+  for (int i = 0; i < attractors.size(); i ++) {
+    Attractor a = attractors.get(i);
+    a.display();
+   // a.update();
+  }
 
-
+if(attractors.size() > 0){
+for(int i = 0; i < people.length-1; i++){
+  TSPSPerson person = people[i];
+  Attractor a = attractors.get(i);
+  //a.lock();
+  a.set(person.centroid.x * width, person.centroid.y * height);
+}
+}
   // this section doesn't work
   if (attractors.size() >= 0) {
-    for (int i = attractors.size()-1; i > people.length ; i--) {
-      attractors.remove(i);
-      ParticleBehavior2D b = physics.behaviors.get(i+1);
-      physics.removeBehavior(b);
+    for (int i = attractors.size()-1; i > people.length +1; i--) {
+   //  Attractor a = attractors.get(i);
+    // a.deleteBehave();
+     attractors.remove(i);
     }
   }
   
+  if(people.length == 0){
+    for(int i = physics.behaviors.size()-1; i > 1  ; i --){
+      ParticleBehavior2D b = physics.behaviors.get(i);
+      physics.removeBehavior(b);
+      
+      
+    }
+    
+    
+    attractors.clear();
+  }
+
 
 
   //debugging
@@ -118,30 +146,12 @@ void draw() {
   println("attractors" + attractors.size());
   println("behaviors" + physics.behaviors.size()); 
 
-  fill(255,255);
-  text("people" + people.length, 10,10); 
-  text ("attractors: " + attractors.size(), 10,25);
+  fill(255, 255);
+  text("people" + people.length, 10, 10); 
+  text ("attractors: " + attractors.size(), 10, 25);
   text ("behaviors: " + physics.behaviors.size(), 10, 40);
   text ("framerate: " + frameRate, 10, 55);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
