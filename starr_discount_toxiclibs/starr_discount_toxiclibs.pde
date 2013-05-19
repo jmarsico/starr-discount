@@ -31,30 +31,40 @@ int maxPeople = 10;                // maximum number of people in the attractors
 Vec2D grav;
 float gravY;
 GravityBehavior gravityForce;
+float drag;
 
 
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
   size(displayWidth, displayHeight, P2D);
-
+  //slider control for gravity
   cp5 = new ControlP5(this);
   cp5.addSlider("gravY")
     .setPosition(10, 65)
       .setRange(0.0, 0.2)
-        .setSize(200, 10);
+        .setSize(200, 10)
+          .setColorCaptionLabel(0)
+            .setCaptionLabel("gravity");
+  ;
+  //slider control for drag
+  cp5 = new ControlP5(this);
+  cp5.addSlider("drag")
+    .setPosition(10, 80)
+      .setRange(0.0, 0.2)
+        .setSize(200, 10)
+          .setColorCaptionLabel(0);
   ;
 
   lastTimeCheck = millis();                                      //used for timer
   tspsReceiver= new TSPS(this, 12000);                           // set up TSPS port
 
   physics = new VerletPhysics2D();                               //set up physics "world"
-  physics.setDrag(0.03);                 //drag force slows down gravity
   gravY = 0.07;
   grav= new Vec2D(0, gravY);
   gravityForce = new GravityBehavior(grav);
   physics.addBehavior(gravityForce);   //adds gravity to particle system
-
+  drag = 0.01;
   //create the ArrayList of attractors
   attractors = new ArrayList<Attractor>();
 
@@ -68,8 +78,10 @@ void setup() {
 
 void draw() {
   background(255);
-  grav.set(0,gravY);
+  grav.set(0, gravY);
   gravityForce.setForce(grav);
+  physics.setDrag(drag);                 //drag force slows down gravity
+
   physics.update ();  //update the physics world
 
   //create new Circle object every interval
@@ -150,6 +162,4 @@ void draw() {
   text ("behaviors: " + physics.behaviors.size(), 10, 40);
   text ("framerate: " + frameRate, 10, 55);
 }
-
-
 
