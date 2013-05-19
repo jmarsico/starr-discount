@@ -1,12 +1,12 @@
 class Attractor extends VerletParticle2D{ 
   Vec2D location;
-  float attStrength = 0.2;
+  float attStrength = 0.1;
   AttractionBehavior thisBehave;
  
   
   Attractor(Vec2D loc) {
     super(loc);
-    location = new Vec2D(x,y);
+    
     physics.addParticle(this);
     thisBehave = new AttractionBehavior (this,width,attStrength);
     physics.addBehavior(thisBehave);
@@ -18,8 +18,8 @@ class Attractor extends VerletParticle2D{
     text("x: " + x + " y: " + y, x, y);
   }
   
-  void update(){
-   // this.lock();
+  void update(Vec2D _loc){
+    location = _loc;
     this.set(location.x, location.y);
   }
   

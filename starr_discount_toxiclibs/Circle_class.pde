@@ -14,6 +14,7 @@ class Circle extends VerletParticle2D {
   float strokewt= 0.3;
   float pulseRate;
   float spacing = 20; 
+  color c;
 
 
   Circle(Vec2D loc) {
@@ -28,11 +29,12 @@ class Circle extends VerletParticle2D {
     r = r + sin(frameCount/pulseRate);
   }
 
-  void display() {
-    fill(255);
-    ellipse(x, y, 5, 5);
+  void display(color _c) {
+    c = _c; 
+    fill(c);
+    ellipse(x, y, 10, 10);
 
-    fill(255, 100);
+    fill(0, 100);
     noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
@@ -40,8 +42,6 @@ class Circle extends VerletParticle2D {
       float _y = y + (sin(ringAngle) * r);
       ellipse(_x, _y, 5, 5);
     }
-
-    //physics.update();
   }
 }
 

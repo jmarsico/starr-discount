@@ -15,7 +15,7 @@ TSPS tspsReceiver;            //initiate instance of TSPS library
 
 //used for timed Circle object generator
 int lastTimeCheck;
-int timeIntervalFlag = 50;
+int timeIntervalFlag = 200;
 
 //used for mousePressed and mouseReleased functions
 Vec2D mousePos;
@@ -30,13 +30,15 @@ int maxPeople = 10;                // maximum number of people in the attractors
 
 
 
+// ----------------------- SETUP -------------------------- 
+
 void setup() {
-  size(displayWidth, displayHeight);
+  size(displayWidth, displayHeight, P2D);
+
   lastTimeCheck = millis();                                      //used for timer
   tspsReceiver= new TSPS(this, 12000);                           // set up TSPS port
+
   physics = new VerletPhysics2D();                               //set up physics "world"
-  // not currently needed: sets the boundaries of the physics world
-  //physics.setWorldBounds(new Rect(0, 0, width, height)); 
   physics.setDrag(0.03);                                         //drag force slows down gravity
   physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.07)));   //adds gravity to particle system
 
@@ -44,17 +46,20 @@ void setup() {
   attractors = new ArrayList<Attractor>();
 
 
-
   //create the ArrayList of circles
   circles = new ArrayList<Circle>();
+  /*
   for (int i = 0; i < numCircles; i ++) {
-    circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
-  }
+   circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
+   }
+   */
 }
 
 
+//--------------------------- DRAW ---------------------------
+
 void draw() {
-  background(0);
+  background(255);
   physics.update ();  //update the physics world
 
   //create new Circle object every interval
@@ -66,7 +71,7 @@ void draw() {
   //update and display circles
   for (Circle c: circles) { 
     c.circUpdate();
-    c.display();
+    c.display(#75D19D);
   }
 
   //remove circles that are off the screen
@@ -78,15 +83,16 @@ void draw() {
   }
 
 
-  // **** experimental section *****
+
+
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
   for (int i = attractors.size(); i < people.length -1; i++) {
     TSPSPerson person = people[i];
     Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height); 
     attractors.add(new Attractor(personAtt));
     Attractor a = attractors.get(i);
-    a.lock();
-    a.set(personAtt.x, personAtt.y);
+    //a.lock();
+    // personAtt.set(person.centroid.x * width, person.centroid.y * height);
   }
 
   for (int i = 0; i < attractors.size(); i ++) {
@@ -99,11 +105,12 @@ void draw() {
     for (int i = 0; i < people.length-1; i++) {
       TSPSPerson person = people[i];
       Attractor a = attractors.get(i);
+      Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height);
       //a.lock();
-      a.set(person.centroid.x * width, person.centroid.y * height);
+      a.update(personAtt);
     }
   }
-  
+
   //playing it safe to clear out all attractors
   if (attractors.size() >= 0) {
     for (int i = attractors.size()-1; i > people.length +1; i--) {
@@ -127,7 +134,7 @@ void draw() {
   println("attractors" + attractors.size());
   println("behaviors" + physics.behaviors.size()); 
 
-  fill(255, 255);
+  fill(0, 255);
   text("people" + people.length, 10, 10); 
   text ("attractors: " + attractors.size(), 10, 25);
   text ("behaviors: " + physics.behaviors.size(), 10, 40);
@@ -142,7 +149,7 @@ void draw() {
 
 void mousePressed() {
   mousePos = new Vec2D(mouseX, mouseY);
-  // create a new positive attraction force field around the mouse position (radius=250px)
+  // create a new positive attraction force field around the mouse position
   mouseAttractor = new AttractionBehavior(mousePos, width, 0.09f);
   physics.addBehavior(mouseAttractor);
 }
