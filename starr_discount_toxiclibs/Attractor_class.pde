@@ -15,7 +15,7 @@ class Attractor extends VerletParticle2D{
   void display(){
     fill(255,0,0);
     ellipse(x,y,10,10);
-    text("x: " + x + " y: " + y, x, y);
+    text("x: " + x + " y: " + y, x + 10, y);
   }
   
   void update(Vec2D _loc){
