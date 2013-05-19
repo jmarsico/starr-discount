@@ -32,6 +32,7 @@ Vec2D grav;
 float gravY;
 GravityBehavior gravityForce;
 float drag;
+float attStrength;
 
 
 // ----------------------- SETUP -------------------------- 
@@ -51,6 +52,15 @@ void setup() {
   cp5 = new ControlP5(this);
   cp5.addSlider("drag")
     .setPosition(10, 80)
+      .setRange(0.0, 0.2)
+        .setSize(200, 10)
+          .setColorCaptionLabel(0);
+  ;
+
+  //slider control for attractor strength
+  cp5 = new ControlP5(this);
+  cp5.addSlider("attStrength")
+    .setPosition(10, 95)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0);
@@ -78,8 +88,7 @@ void setup() {
 
 void draw() {
   background(255);
-  grav.set(0, gravY);
-  gravityForce.setForce(grav);
+  gravityForce.setForce(grav.set(0, gravY));
   physics.setDrag(drag);                 //drag force slows down gravity
 
   physics.update ();  //update the physics world
@@ -120,7 +129,6 @@ void draw() {
   for (int i = 0; i < attractors.size(); i ++) {
     Attractor a = attractors.get(i);
     a.display();
-    // a.update();
   }
 
   if (attractors.size() > 0) {
@@ -129,7 +137,7 @@ void draw() {
       Attractor a = attractors.get(i);
       Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height);
       //a.lock();
-      a.update(personAtt);
+      a.update(personAtt, attStrength);
     }
   }
 

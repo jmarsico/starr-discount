@@ -22,6 +22,18 @@ class Circle extends VerletParticle2D {
     r = 20;
     physics.addParticle(this);
     pulseRate = random(6, 10);
+    
+    float colorChoser = random(0,1.0);
+    
+    if(colorChoser < 0.3){
+      c = #75D19D;
+    } else if(colorChoser >=0.3 && colorChoser < 0.6){
+      c = #4AB03B;
+    } else if (colorChoser >=0.6){
+      c = #732646;
+    }
+
+    
   }
 
 
@@ -30,9 +42,9 @@ class Circle extends VerletParticle2D {
   }
 
   void display(color _c) {
-    c = _c; 
-    fill(c);
-    ellipse(x, y, 10, 10);
+   // c = _c; 
+    fill(c, 100);
+    ellipse(x, y, 30, 30);
 
     fill(0, 100);
     noStroke();
