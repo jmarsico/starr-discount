@@ -9,14 +9,11 @@ import toxi.physics2d.behaviors.*;
 import toxi.geom.*;
 import java.util.Iterator;
 import tsps.*;
+import controlP5.*;
 
 VerletPhysics2D physics;      //initiate instance of physics library
 TSPS tspsReceiver;            //initiate instance of TSPS library
-
-//import controlP5
-import controlP5.*;
-ControlP5 cp5;
-Slider abc;
+ControlP5 cp5;                //initiate instance of ControlP5 library
 
 //used for timed Circle object generator
 int lastTimeCheck;
@@ -28,6 +25,7 @@ int numCircles = 10;         // number of Circle objects
 ArrayList<Attractor> attractors;   //provision an ArrayList of Attractor objects
 int maxPeople = 10;                // maximum number of people in the attractors ArrayList
 
+//parameters used for Controls
 Vec2D grav;
 float gravY;
 GravityBehavior gravityForce;
@@ -39,6 +37,7 @@ float attStrength;
 
 void setup() {
   size(displayWidth, displayHeight, P2D);
+  
   //slider control for gravity
   cp5 = new ControlP5(this);
   cp5.addSlider("gravY")
@@ -46,15 +45,16 @@ void setup() {
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
-            .setCaptionLabel("gravity");
+            .setCaptionLabel("gravity")
   ;
+  
   //slider control for drag
   cp5 = new ControlP5(this);
   cp5.addSlider("drag")
     .setPosition(10, 80)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
-          .setColorCaptionLabel(0);
+          .setColorCaptionLabel(0)
   ;
 
   //slider control for attractor strength
@@ -63,7 +63,7 @@ void setup() {
     .setPosition(10, 95)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
-          .setColorCaptionLabel(0);
+          .setColorCaptionLabel(0)
   ;
 
   lastTimeCheck = millis();                                      //used for timer
@@ -141,16 +141,19 @@ void draw() {
     }
   }
 
-  //playing it safe to clear out all attractors
+  //removing attractors
   if (attractors.size() >= 0) {
     for (int i = attractors.size()-1; i > people.length +1; i--) {
       attractors.remove(i);
     }
   }
 
-
-  // ***** BUG ***** re-write this to move from physic.behaviors.size down to 
-  // people.length, removing behaviors as you go.
+  //removing behaviors
+  for (int i = physics.behaviors.size()-1; i > people.length  ; i --) {
+    ParticleBehavior2D b = physics.behaviors.get(i);
+    physics.removeBehavior(b);
+  } 
+  //playing it safe and removing everything if people array is empty
   if (people.length == 0) {
     for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
       ParticleBehavior2D b = physics.behaviors.get(i);
@@ -158,6 +161,9 @@ void draw() {
     }  
     attractors.clear();
   }
+
+
+
 
 
 
