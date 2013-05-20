@@ -148,7 +148,9 @@ void draw() {
     }
   }
 
-  //playing it safe to clear out all behaviors (except gravity)
+
+  // ***** BUG ***** re-write this to move from physic.behaviors.size down to 
+  // people.length, removing behaviors as you go.
   if (people.length == 0) {
     for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
       ParticleBehavior2D b = physics.behaviors.get(i);
