@@ -17,7 +17,7 @@ ControlP5 cp5;                //initiate instance of ControlP5 library
 
 //used for timed Circle object generator
 int lastTimeCheck;
-int timeIntervalFlag = 200;
+int timeIntervalFlag = 100;
 
 ArrayList<Circle> circles;   //initiate an ArrayList of Circle objects
 int numCircles = 10;         // number of Circle objects
@@ -113,7 +113,7 @@ void draw() {
     }
   }
 
-
+// -------------------- person tracking section ---------------------
 
 
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
@@ -122,15 +122,15 @@ void draw() {
     Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height); 
     attractors.add(new Attractor(personAtt));
     Attractor a = attractors.get(i);
-    //a.lock();
-    // personAtt.set(person.centroid.x * width, person.centroid.y * height);
   }
 
+ //comment out this for-loop once calibrated
   for (int i = 0; i < attractors.size(); i ++) {
     Attractor a = attractors.get(i);
     a.display();
   }
 
+  //add attractors
   if (attractors.size() > 0) {
     for (int i = 0; i < people.length-1; i++) {
       TSPSPerson person = people[i];
@@ -153,6 +153,7 @@ void draw() {
     ParticleBehavior2D b = physics.behaviors.get(i);
     physics.removeBehavior(b);
   } 
+  
   //playing it safe and removing everything if people array is empty
   if (people.length == 0) {
     for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
@@ -161,10 +162,6 @@ void draw() {
     }  
     attractors.clear();
   }
-
-
-
-
 
 
   //debugging
