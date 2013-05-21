@@ -1,4 +1,3 @@
-
 /*
 before running, open OpenTSPS application and set 
  background, desired threshold, etc. 
@@ -87,7 +86,7 @@ void setup() {
 //--------------------------- DRAW ---------------------------
 
 void draw() {
-  background(255);
+  background(#d7eff4);
   gravityForce.setForce(grav.set(0, gravY));
   physics.setDrag(drag);                 //drag force slows down gravity
 
@@ -117,7 +116,7 @@ void draw() {
 
 
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
-  for (int i = attractors.size(); i < people.length -1; i++) {
+  for (int i = attractors.size(); i < people.length ; i++) {
     TSPSPerson person = people[i];
     Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height); 
     attractors.add(new Attractor(personAtt));
@@ -136,7 +135,7 @@ void draw() {
       TSPSPerson person = people[i];
       Attractor a = attractors.get(i);
       Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height);
-      //a.lock();
+      a.lock();
       a.update(personAtt, attStrength);
     }
   }
