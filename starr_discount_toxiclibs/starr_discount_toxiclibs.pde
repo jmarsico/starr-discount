@@ -86,7 +86,7 @@ void setup() {
 //--------------------------- DRAW ---------------------------
 
 void draw() {
-  background(#e16a62);
+  background(#73b4b3);
   gravityForce.setForce(grav.set(0, gravY));
   physics.setDrag(drag);                 //drag force slows down gravity
 
