@@ -57,14 +57,14 @@ class Circle extends VerletParticle2D {
     }
     
     //inner circle
-    fill(#6b9c0d, 200);
+    fill(#f6918a, 255);
     noStroke();
     ellipse(x, y, r, r);
     
     //rings
     noFill();
     smooth();
-    stroke(#cc9376);
+    stroke(255,100);
     ellipse(x, y, r + 10, r + 10);
     
     strokeWeight(strokewt);
