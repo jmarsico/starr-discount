@@ -189,15 +189,16 @@ void hideControls() {
   if (keyPressed) {
     cp5.show();
     //stats and controls
-    fill(255, 255, 0);
+    fill(255,255,0, 200);
     noStroke();
-    rect(0, 0, width, 20);
+    rect(0, 0, 300, 300);
 
-    fill(0, 255);
-    text("people: " + peopleLength, 10, 15); 
-    text ("behaviors: " + physics.behaviors.size(), 100, 15);
-    text("circles: " + circles.size(), 200, 15);
-    text ("framerate: " + frameRate, 300, 15);
+    fill(0);
+    textSize(25 );
+    text("people: " + peopleLength, 10, 180); 
+    text ("behaviors: " + physics.behaviors.size(), 10, 210);
+    text("circles: " + circles.size(), 10, 240);
+    text ("framerate: " + frameRate, 10, 270);
   } 
   else {
     cp5.hide();
