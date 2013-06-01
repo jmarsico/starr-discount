@@ -1,40 +1,31 @@
-class Attractor extends VerletParticle2D{ 
+class Attractor {
   Vec2D location;
-  float attractorStrength = 0.1;
-  AttractionBehavior thisBehave;
-  
- 
-  
-  Attractor(Vec2D loc) {
-    super(loc);
-    
-    physics.addParticle(this);
-    thisBehave = new AttractionBehavior (this,width,attractorStrength);
-    physics.addBehavior(thisBehave);
-    
-    
-    
+  float reach;
+  float strength;
+  AttractionBehavior atta;
+
+  // constructor requires all things to create an attraction behavior
+  Attractor(Vec2D loc, float _reach, float _strength) {
+    location = loc;
+    reach = _reach;
+    strength = _strength;
   }
-  
-  void display(){
-    fill(255,0,0);
-    ellipse(x,y,10,10);
-    text("x: " + x + " y: " + y, x + 10, y);
+
+  //create and return an attraction behavior
+  AttractionBehavior att() {
+    atta = new AttractionBehavior(location, reach, strength);
+    return atta;
   }
-  
-  void update(Vec2D _loc, float _attractorStrength){
-    location = _loc;
-    this.lock();
-    this.set(location.x, location.y);
-    thisBehave.setStrength(_attractorStrength);
+
+  //update the location of the attraction behavior
+  void update(float x, float y) {
+    location.set(x, y);
   }
-  
-  void deleteBehave(){
-    physics.removeBehavior(thisBehave);
+
+  //display the attraction behavior location (disable this function in the main draw() when presenting!!)
+  void display() {
+    fill(255, 0, 0);
+    ellipse(location.x, location.y, 10, 10);
   }
 }
-  
-  
-  
-  
-    
+

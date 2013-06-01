@@ -21,8 +21,7 @@ int timeIntervalFlag = 100;
 ArrayList<Circle> circles;   //initiate an ArrayList of Circle objects
 int numCircles = 10;         // number of Circle objects
 
-ArrayList<Attractor> attractors;   //provision an ArrayList of Attractor objects
-int maxPeople = 10;                // maximum number of people in the attractors ArrayList
+ArrayList<Attractor> attractors;
 
 //parameters used for Controls
 Vec2D grav;
@@ -74,9 +73,10 @@ void setup() {
   gravityForce = new GravityBehavior(grav);
   physics.addBehavior(gravityForce);   //adds gravity to particle system
   drag = 0.01;
-  //create the ArrayList of attractors
-  attractors = new ArrayList<Attractor>();
 
+
+  //create arraylist of attractors
+  attractors = new ArrayList<Attractor>();
 
   //create the ArrayList of circles
   circles = new ArrayList<Circle>();
@@ -115,7 +115,7 @@ void draw() {
   //remove circles that are off the screen
   for (int i = circles.size() -1; i >=0; i --) {
     Circle c = circles.get(i);
-    if (c.y > height + 200) {
+    if (c.y > height + 20) {
       circles.remove(c);
     }
   }
@@ -124,36 +124,44 @@ void draw() {
 
 
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
-  for (int i = attractors.size(); i < people.length ; i++) {
+  Vec2D personLoc = new Vec2D(0,0);
+  //adding attractors
+  for (int i = attractors.size(); i < people.length; i++){
     TSPSPerson person = people[i];
-    Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height); 
-    attractors.add(new Attractor(personAtt));
-    Attractor a = attractors.get(i);
+    personLoc = new Vec2D(person.centroid.x * width, person.centroid.y * height);
+    attractors.add(new Attractor(personLoc, width, attStrength));
   }
+  
+  //adding behaviors
+  for(int i = 0; i < attractors.size(); i ++){
+    Attractor a = attractors.get(i);
+    physics.addBehavior(a.att());
+  }
+<<<<<<< HEAD
 
   //comment out this for-loop once calibrated
   for (int i = 0; i < attractors.size(); i ++) {
+=======
+  
+  
+  //updating and displaying attractors
+  for(int i = 0; i < attractors.size(); i++){
+    TSPSPerson person = people[i];
+>>>>>>> newbranch
     Attractor a = attractors.get(i);
+    a.update(person.centroid.x * width, person.centroid.y * height);
     a.display();
   }
+  
+  
+  
+  
+  
+  
+  
+    
 
-  //add attractors
-  if (attractors.size() > 0) {
-    for (int i = 0; i < people.length-1; i++) {
-      TSPSPerson person = people[i];
-      Attractor a = attractors.get(i);
-      Vec2D personAtt = new Vec2D(person.centroid.x * width, person.centroid.y * height);
-      a.lock();
-      a.update(personAtt, attStrength);
-    }
-  }
-
-  //removing attractors
-  if (attractors.size() >= 0) {
-    for (int i = attractors.size()-1; i > people.length +1; i--) {
-      attractors.remove(i);
-    }
-  }
+ 
 
   //removing behaviors
   for (int i = physics.behaviors.size()-1; i > people.length  ; i --) {
@@ -167,19 +175,24 @@ void draw() {
       ParticleBehavior2D b = physics.behaviors.get(i);
       physics.removeBehavior(b);
     }  
-    attractors.clear();
   }
+
+  
 
 
   //debugging
   println("people" + people.length); 
-  println("attractors" + attractors.size());
   println("behaviors" + physics.behaviors.size()); 
 
   fill(0, 255);
   text("people" + people.length, 10, 10); 
+<<<<<<< HEAD
   text ("attractors: " + attractors.size(), 10, 25);
   text ("behaviors: " + physics.behaviors.size(), 200, 10);
   text ("framerate: " + frameRate, 200, 25);
+=======
+  text ("behaviors: " + physics.behaviors.size(), 10, 25);
+  text ("framerate: " + frameRate, 10, 55);
+>>>>>>> newbranch
 }
 
