@@ -35,7 +35,7 @@ float attStrength;
 
 void setup() {
   size(displayWidth, displayHeight, P2D);
-  
+
   //slider control for gravity
   cp5 = new ControlP5(this);
   cp5.addSlider("gravY")
@@ -44,8 +44,8 @@ void setup() {
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             .setCaptionLabel("gravity")
-  ;
-  
+              ;
+
   //slider control for drag
   cp5 = new ControlP5(this);
   cp5.addSlider("drag")
@@ -53,7 +53,7 @@ void setup() {
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
-  ;
+            ;
 
   //slider control for attractor strength
   cp5 = new ControlP5(this);
@@ -62,7 +62,7 @@ void setup() {
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
-  ;
+            ;
 
   lastTimeCheck = millis();                                      //used for timer
   tspsReceiver= new TSPS(this, 12000);                           // set up TSPS port
@@ -101,55 +101,58 @@ void draw() {
   //update and display circles
   for (Circle c: circles) { 
     c.circUpdate();
-    c.display(#75D19D);
+    c.display();
   }
 
   //remove circles that are off the screen
   for (int i = circles.size() -1; i >=0; i --) {
     Circle c = circles.get(i);
-    if (c.y > height + 20) {
+    if (c.age > 4000) {
+      circles.remove(c);
+    }
+    else if (c.y > height + 30) {
       circles.remove(c);
     }
   }
 
-// -------------------- person tracking section ---------------------
+  // -------------------- person tracking section ---------------------
 
 
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
-  Vec2D personLoc = new Vec2D(0,0);
+  Vec2D personLoc = new Vec2D(0, 0);
   //adding attractors
-  for (int i = attractors.size(); i < people.length; i++){
+  for (int i = attractors.size(); i < people.length; i++) {
     TSPSPerson person = people[i];
     personLoc = new Vec2D(person.centroid.x * width, person.centroid.y * height);
     attractors.add(new Attractor(personLoc, width, attStrength));
   }
-  
+
   //adding behaviors
-  for(int i = 0; i < attractors.size(); i ++){
+  for (int i = 0; i < attractors.size(); i ++) {
     Attractor a = attractors.get(i);
     physics.addBehavior(a.att());
   }
-  
+
   //updating and displaying attractors
-  for(int i = 0; i < people.length; i++){
+  for (int i = 0; i < people.length; i++) {
     TSPSPerson person = people[i];
     Attractor a = attractors.get(i);
     a.update(person.centroid.x * width, person.centroid.y * height);
     a.display();
   }
-  
+
   //removing attractors
-  for (int i = attractors.size() -1; i > people.length; i --){
+  for (int i = attractors.size() -1; i > people.length; i --) {
     Attractor a = attractors.get(i);
     attractors.remove(a);
   }
-  
+
   //removing behaviors
   for (int i = physics.behaviors.size()-1; i > people.length  ; i --) {
     ParticleBehavior2D b = physics.behaviors.get(i);
     physics.removeBehavior(b);
   } 
-  
+
   //playing it safe and removing everything if people array is empty
   if (people.length == 0) {
     for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
@@ -159,7 +162,7 @@ void draw() {
     attractors.clear();
   }
 
-  
+
 
 
   //debugging

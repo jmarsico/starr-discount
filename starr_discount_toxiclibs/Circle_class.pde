@@ -15,6 +15,9 @@ class Circle extends VerletParticle2D {
   float pulseRate;
   float spacing = 20; 
   color c;
+  float pulseAlpha, circAlpha, ringAlpha;
+  int age;
+  int fade;
 
 
   Circle(Vec2D loc) {
@@ -22,15 +25,18 @@ class Circle extends VerletParticle2D {
     r = 20;
     physics.addParticle(this);
     pulseRate = random(6, 10);
-
     float colorChoser = random(0, 1.0);
+    pulseAlpha = 200;
+    circAlpha = 150;
+    ringAlpha = 255;
+    age = 0;
 
     if (colorChoser < 0.3) {
       c = #75D19D;
     } 
     else if (colorChoser >=0.3 && colorChoser < 0.6) {
       c = #4AB03B;
-    } 
+    }  
     else if (colorChoser >=0.6) {
       c = #732646;
     }
@@ -39,15 +45,18 @@ class Circle extends VerletParticle2D {
   //update circle pulsation
   void circUpdate() {
     r = r + sin(frameCount/pulseRate);
+    age+=10;
+    if (age > 3000){
+      fade +=5;
+
+    }
   }
   //draw the object
-  void display(color _c) {
-    // c = _c; 
+  void display() {
     ellipseMode(CENTER);
-    
-    
+
     //draw the circle of circles
-    fill(0, 200);
+    fill(0, pulseAlpha - fade);
     noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
@@ -55,30 +64,28 @@ class Circle extends VerletParticle2D {
       float _y = y + (sin(ringAngle) * r);
       ellipse(_x, _y, 5, 5);
     }
-    
+
     //inner circle
-    fill(0, 200);
+    fill(0, circAlpha - fade);
     noStroke();
     ellipse(x, y, r, r);
-    
+
     //rings
     noFill();
     smooth();
-    stroke(0);
+    stroke(0, ringAlpha - fade);
     ellipse(x, y, r + 10, r + 10);
-    
-    strokeWeight(strokewt);
-    ellipse(x, y, r + 12, r + 12);
 
     strokeWeight(strokewt);
-    ellipse(x, y, r + 16, r +16);
-
-    strokeWeight(strokewt);
+    ellipse(x, y, r + 12, r + 12);  
+    ellipse(x, y, r + 16, r +16);    
     ellipse(x, y, r + 30, r + 30);
-
-    strokeWeight(strokewt);
     ellipse(x, y, r + 45, r + 45);
+  }
+  
+
+
+
     
   }
-}
 
