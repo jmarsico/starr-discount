@@ -34,35 +34,35 @@ float attStrength;
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayWidth/2, P2D);
-
+  size(displayWidth, displayHeight, P2D);
+  
   //slider control for gravity
   cp5 = new ControlP5(this);
   cp5.addSlider("gravY")
-    .setPosition(400, 1)
+    .setPosition(10, 65)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             .setCaptionLabel("gravity")
-              ;
-
+  ;
+  
   //slider control for drag
   cp5 = new ControlP5(this);
   cp5.addSlider("drag")
-    .setPosition(400, 16)
+    .setPosition(10, 80)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
-            ;
+  ;
 
   //slider control for attractor strength
   cp5 = new ControlP5(this);
   cp5.addSlider("attStrength")
-    .setPosition(400, 27)
+    .setPosition(10, 95)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
-            ;
+  ;
 
   lastTimeCheck = millis();                                      //used for timer
   tspsReceiver= new TSPS(this, 12000);                           // set up TSPS port
@@ -86,15 +86,7 @@ void setup() {
 //--------------------------- DRAW ---------------------------
 
 void draw() {
-  //blue background
-  background(0);
-
-  //pink background
-  //background(#e16a62);
-
-  //other background
-  //background(#d7eff4);
-
+  background(255);
   gravityForce.setForce(grav.set(0, gravY));
   physics.setDrag(drag);                 //drag force slows down gravity
 
@@ -120,7 +112,7 @@ void draw() {
     }
   }
 
-  // -------------------- person tracking section ---------------------
+// -------------------- person tracking section ---------------------
 
 
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
@@ -137,44 +129,34 @@ void draw() {
     Attractor a = attractors.get(i);
     physics.addBehavior(a.att());
   }
-<<<<<<< HEAD
-
-  //comment out this for-loop once calibrated
-  for (int i = 0; i < attractors.size(); i ++) {
-=======
-  
   
   //updating and displaying attractors
-  for(int i = 0; i < attractors.size(); i++){
+  for(int i = 0; i < people.length; i++){
     TSPSPerson person = people[i];
->>>>>>> newbranch
     Attractor a = attractors.get(i);
     a.update(person.centroid.x * width, person.centroid.y * height);
     a.display();
   }
   
+  //removing attractors
+  for (int i = attractors.size() -1; i > people.length; i --){
+    Attractor a = attractors.get(i);
+    attractors.remove(a);
+  }
   
-  
-  
-  
-  
-  
-    
-
- 
-
   //removing behaviors
   for (int i = physics.behaviors.size()-1; i > people.length  ; i --) {
     ParticleBehavior2D b = physics.behaviors.get(i);
     physics.removeBehavior(b);
   } 
-
+  
   //playing it safe and removing everything if people array is empty
   if (people.length == 0) {
     for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
       ParticleBehavior2D b = physics.behaviors.get(i);
       physics.removeBehavior(b);
     }  
+    attractors.clear();
   }
 
   
@@ -186,13 +168,7 @@ void draw() {
 
   fill(0, 255);
   text("people" + people.length, 10, 10); 
-<<<<<<< HEAD
-  text ("attractors: " + attractors.size(), 10, 25);
-  text ("behaviors: " + physics.behaviors.size(), 200, 10);
-  text ("framerate: " + frameRate, 200, 25);
-=======
   text ("behaviors: " + physics.behaviors.size(), 10, 25);
   text ("framerate: " + frameRate, 10, 55);
->>>>>>> newbranch
 }
 

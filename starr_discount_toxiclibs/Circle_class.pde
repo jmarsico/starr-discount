@@ -47,7 +47,7 @@ class Circle extends VerletParticle2D {
     
     
     //draw the circle of circles
-    fill(255, 220);
+    fill(0, 200);
     noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
@@ -57,14 +57,14 @@ class Circle extends VerletParticle2D {
     }
     
     //inner circle
-    fill(255, 200);
+    fill(0, 200);
     noStroke();
     ellipse(x, y, r, r);
     
     //rings
     noFill();
     smooth();
-    stroke(255,100);
+    stroke(0);
     ellipse(x, y, r + 10, r + 10);
     
     strokeWeight(strokewt);
