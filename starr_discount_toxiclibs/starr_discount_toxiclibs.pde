@@ -1,6 +1,5 @@
 /*
-before running, open OpenTSPS application and set 
- background, desired threshold, etc. 
+before running, open OpenTSPS application and click "minimize" 
  */
 
 import toxi.physics2d.*;
@@ -17,25 +16,135 @@ ControlP5 cp5;                //initiate instance of ControlP5 library
 //used for timed Circle object generator
 int lastTimeCheck;
 int timeIntervalFlag = 100;
+int attractorKillTime = 6000;
 
-ArrayList<Circle> circles;   //initiate an ArrayList of Circle objects
-int numCircles = 10;         // number of Circle objects
+ArrayList<Circle> circles;           //initiate an ArrayList of Circle objects
+ArrayList<Attractor> attractors;     //initiate an ArrayList of Attractor objects
 
-ArrayList<Attractor> attractors;
+float gravY = 0.07;                 //initial gravity coeff
+float drag = 0.01;                   //initial drag coeff
+float attStrength = 0.1;            //initial attraction coeff
 
-//parameters used for Controls
-Vec2D grav;
-float gravY;
-GravityBehavior gravityForce;
-float drag;
-float attStrength;
-
+GravityBehavior gravityForce;       //initiate gravityForce (toxiclibs)
+Vec2D grav;                         //initiate gravity Vec2D (toxiclibs)
 
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayHeight);
+  size(displayWidth, displayWidth/2, P2D);
+  frameRate(30);
+  controllers();                                                 //comment this line out once force coefficients are determine
+  lastTimeCheck = millis();                                      //used for Circle production timer
+  tspsReceiver= new TSPS(this, 12000);                           //set up UDP port for TSPS
+  physics = new VerletPhysics2D();                               //set up physics "world"
+  grav= new Vec2D(0, gravY);                                     //set up gravity vector for gravityForce
+  gravityForce = new GravityBehavior(grav);                      //sets up the gravity force
+  physics.addBehavior(gravityForce);                             //adds gravity force to particle system
+  attractors = new ArrayList<Attractor>();                       //create arraylist of attractors
+  circles = new ArrayList<Circle>();                             //create the ArrayList of circles
+}
 
+
+//--------------------------- DRAW ---------------------------
+
+
+void draw() {
+  background(255);
+  gravityForce.setForce(grav.set(0, gravY));                     //update gravityForce
+  physics.setDrag(drag);                                         //update drag
+  physics.update ();                                             //update the physics world
+
+  //Circle creation 
+  if (millis() > lastTimeCheck + timeIntervalFlag) {
+    lastTimeCheck = millis();
+    circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
+  }
+
+  //update and display circles
+  for (Circle c: circles) { 
+    c.circUpdate();
+    c.display();
+  }
+
+  //remove circles that are off the screen or older than six seconds
+  for (int i = circles.size() -1; i >=0; i --) {
+    Circle c = circles.get(i);
+    if (c.age > attractorKillTime) {
+      circles.remove(c);
+    }
+    else if (c.y > height + 30) {
+      circles.remove(c);
+    }
+  }
+
+  // -------------------- person tracking section ---------------------
+
+  //set up array of people from TSPS
+  TSPSPerson[] people = tspsReceiver.getPeopleArray();
+
+  Vec2D personLoc = new Vec2D(0, 0);
+  
+  //add attractors
+  for (int i = attractors.size(); i < people.length; i++) {
+    TSPSPerson person = people[i];
+    personLoc = new Vec2D(person.centroid.x * width, person.centroid.y * height);
+    attractors.add(new Attractor(personLoc, width, attStrength));
+  }
+
+  //add behaviors
+  for (int i = 0; i < attractors.size(); i ++) {
+    Attractor a = attractors.get(i);
+    physics.addBehavior(a.att());
+  }
+
+  //update and display attractors
+  for (int i = 0; i < people.length; i++) {
+    TSPSPerson person = people[i];
+    Attractor a = attractors.get(i);
+    a.update(person.centroid.x * width, person.centroid.y * height);
+    a.display();          //comment out this line for display
+  }
+
+  //remove attractors
+  for (int i = attractors.size() -1; i > people.length; i --) {
+    Attractor a = attractors.get(i);
+    attractors.remove(a);
+  }
+
+  //remove behaviors
+  for (int i = physics.behaviors.size()-1; i > people.length  ; i --) {
+    ParticleBehavior2D b = physics.behaviors.get(i);
+    physics.removeBehavior(b);
+  } 
+
+  //playing it safe and removing everything if people array is empty
+  if (people.length == 0) {
+    for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
+      ParticleBehavior2D b = physics.behaviors.get(i);
+      physics.removeBehavior(b);
+    }  
+    attractors.clear();
+  }
+
+  //debugging
+  println("people: " + people.length); 
+  println("behaviors" + physics.behaviors.size()); 
+
+  //stats and controls
+  fill(255, 255, 0);
+  noStroke();
+  rect(0, 0, width, 20);
+
+  fill(0, 255);
+  text("people: " + people.length, 10, 15); 
+  text ("behaviors: " + physics.behaviors.size(), 100, 15);
+  text("circles: " + circles.size(), 200, 15);
+  text ("framerate: " + frameRate, 300, 15);
+}
+
+
+// use this function to calibrate force coefficients in real time 
+void controllers() {
   //slider control for gravity
   cp5 = new ControlP5(this);
   cp5.addSlider("gravY")
@@ -63,120 +172,5 @@ void setup() {
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             ;
-
-  lastTimeCheck = millis();                                      //used for timer
-  tspsReceiver= new TSPS(this, 12000);                           // set up TSPS port
-
-  physics = new VerletPhysics2D();                               //set up physics "world"
-  gravY = 0.07;
-  grav= new Vec2D(0, gravY);
-  gravityForce = new GravityBehavior(grav);
-  physics.addBehavior(gravityForce);   //adds gravity to particle system
-  drag = 0.01;
-
-
-  //create arraylist of attractors
-  attractors = new ArrayList<Attractor>();
-
-  //create the ArrayList of circles
-  circles = new ArrayList<Circle>();
 }
-
-
-//--------------------------- DRAW ---------------------------
-
-void draw() {
-  background(255);
-  gravityForce.setForce(grav.set(0, gravY));
-  physics.setDrag(drag);                 //drag force slows down gravity
-
-  physics.update ();  //update the physics world
-
-  //create new Circle object every interval
-  if (millis() > lastTimeCheck + timeIntervalFlag) {
-    lastTimeCheck = millis();
-    circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
-  }
-
-  //update and display circles
-  for (Circle c: circles) { 
-    c.circUpdate();
-    c.display();
-  }
-
-  //remove circles that are off the screen
-  for (int i = circles.size() -1; i >=0; i --) {
-    Circle c = circles.get(i);
-    if (c.age > 6000) {
-      circles.remove(c);
-    }
-    else if (c.y > height + 30) {
-      circles.remove(c);
-    }
-  }
-
-  // -------------------- person tracking section ---------------------
-
-
-  TSPSPerson[] people = tspsReceiver.getPeopleArray();
-  Vec2D personLoc = new Vec2D(0, 0);
-  //adding attractors
-  for (int i = attractors.size(); i < people.length; i++) {
-    TSPSPerson person = people[i];
-    personLoc = new Vec2D(person.centroid.x * width, person.centroid.y * height);
-    attractors.add(new Attractor(personLoc, width, attStrength));
-  }
-
-  //adding behaviors
-  for (int i = 0; i < attractors.size(); i ++) {
-    Attractor a = attractors.get(i);
-    physics.addBehavior(a.att());
-  }
-
-  //updating and displaying attractors
-  for (int i = 0; i < people.length; i++) {
-    TSPSPerson person = people[i];
-    Attractor a = attractors.get(i);
-    a.update(person.centroid.x * width, person.centroid.y * height);
-    a.display();
-  }
-
-  //removing attractors
-  for (int i = attractors.size() -1; i > people.length; i --) {
-    Attractor a = attractors.get(i);
-    attractors.remove(a);
-  }
-
-  //removing behaviors
-  for (int i = physics.behaviors.size()-1; i > people.length  ; i --) {
-    ParticleBehavior2D b = physics.behaviors.get(i);
-    physics.removeBehavior(b);
-  } 
-
-  //playing it safe and removing everything if people array is empty
-  if (people.length == 0) {
-    for (int i = physics.behaviors.size()-1; i > 0  ; i --) {
-      ParticleBehavior2D b = physics.behaviors.get(i);
-      physics.removeBehavior(b);
-    }  
-    attractors.clear();
-  }
-
-
-  //debugging
-  println("people: " + people.length); 
-  println("behaviors" + physics.behaviors.size()); 
-
-  //stats and controls
-  fill(255, 255, 0);
-  noStroke();
-  rect(0, 0, width, 20);
-
-  fill(0, 255);
-  text("people: " + people.length, 10, 15); 
-  text ("behaviors: " + physics.behaviors.size(), 100, 15);
-  text("circles: " + circles.size(), 200, 15);
-  text ("framerate: " + frameRate, 300, 15);
-}
-
 

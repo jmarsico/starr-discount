@@ -58,7 +58,7 @@ class Circle extends VerletParticle2D {
   void display() {
     ellipseMode(CENTER);
 
-/*
+
     //draw the circle of circles
     fill(c, pulseAlpha - fade);
     noStroke();
@@ -68,7 +68,7 @@ class Circle extends VerletParticle2D {
       float _y = y + (sin(ringAngle) * r);
       ellipse(_x, _y, 5, 5);
     }
-*/
+
     //inner circle
     fill(c, circAlpha - fade);
     noStroke();
