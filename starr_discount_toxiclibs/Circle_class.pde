@@ -4,7 +4,6 @@
  we can call any function from the VerletParticle class from the main program.
  */
 
-
 class Circle extends VerletParticle2D {
 
   float angle = 0;
@@ -18,11 +17,12 @@ class Circle extends VerletParticle2D {
   float pulseAlpha, circAlpha, ringAlpha;
   int age;
   int fade;
+  int ageThreshold = 5000;
 
 
   Circle(Vec2D loc) {
     super(loc);
-    r = 20;
+    r = random(2,20);
     physics.addParticle(this);
     pulseRate = random(6, 10);
     float colorChoser = random(0, 1.0);
@@ -42,21 +42,25 @@ class Circle extends VerletParticle2D {
     }
   }
 
-  //update circle pulsation
+  
   void circUpdate() {
+    //update the radius
     r = r + sin(frameCount/pulseRate);
-    age+=10;
-    if (age > 3000){
-      fade +=5;
 
+    //update the age and fade coefficient
+    age+=10;
+    if (age > ageThreshold) {
+      fade +=5;
     }
   }
+  
   //draw the object
   void display() {
     ellipseMode(CENTER);
 
+/*
     //draw the circle of circles
-    fill(0, pulseAlpha - fade);
+    fill(c, pulseAlpha - fade);
     noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
@@ -64,9 +68,9 @@ class Circle extends VerletParticle2D {
       float _y = y + (sin(ringAngle) * r);
       ellipse(_x, _y, 5, 5);
     }
-
+*/
     //inner circle
-    fill(0, circAlpha - fade);
+    fill(c, circAlpha - fade);
     noStroke();
     ellipse(x, y, r, r);
 
@@ -82,10 +86,5 @@ class Circle extends VerletParticle2D {
     ellipse(x, y, r + 30, r + 30);
     ellipse(x, y, r + 45, r + 45);
   }
-  
-
-
-
-    
-  }
+}
 

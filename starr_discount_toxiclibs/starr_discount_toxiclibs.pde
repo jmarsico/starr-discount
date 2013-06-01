@@ -34,12 +34,12 @@ float attStrength;
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayHeight, P2D);
+  size(displayWidth, displayHeight);
 
   //slider control for gravity
   cp5 = new ControlP5(this);
   cp5.addSlider("gravY")
-    .setPosition(10, 65)
+    .setPosition(10, 20)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
@@ -49,7 +49,7 @@ void setup() {
   //slider control for drag
   cp5 = new ControlP5(this);
   cp5.addSlider("drag")
-    .setPosition(10, 80)
+    .setPosition(10, 35)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
@@ -58,7 +58,7 @@ void setup() {
   //slider control for attractor strength
   cp5 = new ControlP5(this);
   cp5.addSlider("attStrength")
-    .setPosition(10, 95)
+    .setPosition(10, 50)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
@@ -107,7 +107,7 @@ void draw() {
   //remove circles that are off the screen
   for (int i = circles.size() -1; i >=0; i --) {
     Circle c = circles.get(i);
-    if (c.age > 4000) {
+    if (c.age > 6000) {
       circles.remove(c);
     }
     else if (c.y > height + 30) {
@@ -163,15 +163,20 @@ void draw() {
   }
 
 
-
-
   //debugging
-  println("people" + people.length); 
+  println("people: " + people.length); 
   println("behaviors" + physics.behaviors.size()); 
 
+  //stats and controls
+  fill(255, 255, 0);
+  noStroke();
+  rect(0, 0, width, 20);
+
   fill(0, 255);
-  text("people" + people.length, 10, 10); 
-  text ("behaviors: " + physics.behaviors.size(), 10, 25);
-  text ("framerate: " + frameRate, 10, 55);
+  text("people: " + people.length, 10, 15); 
+  text ("behaviors: " + physics.behaviors.size(), 100, 15);
+  text("circles: " + circles.size(), 200, 15);
+  text ("framerate: " + frameRate, 300, 15);
 }
+
 
