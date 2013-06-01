@@ -76,7 +76,6 @@ class Circle extends VerletParticle2D {
 
     //rings
     noFill();
-    smooth();
     stroke(0, ringAlpha - fade);
     ellipse(x, y, r + 10, r + 10);
 

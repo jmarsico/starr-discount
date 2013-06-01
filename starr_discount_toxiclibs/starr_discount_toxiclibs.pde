@@ -12,6 +12,9 @@ import controlP5.*;
 VerletPhysics2D physics;      //initiate instance of physics library
 TSPS tspsReceiver;            //initiate instance of TSPS library
 ControlP5 cp5;                //initiate instance of ControlP5 library
+ColorPicker cp;
+
+
 
 //used for timed Circle object generator
 int lastTimeCheck;
@@ -33,15 +36,15 @@ Vec2D grav;                         //initiate gravity Vec2D (toxiclibs)
 void setup() {
   size(displayWidth, displayWidth/2, P2D);
   frameRate(30);
-  controllers();                                                 //comment this line out once force coefficients are determine
-  lastTimeCheck = millis();                                      //used for Circle production timer
-  tspsReceiver= new TSPS(this, 12000);                           //set up UDP port for TSPS
-  physics = new VerletPhysics2D();                               //set up physics "world"
-  grav= new Vec2D(0, gravY);                                     //set up gravity vector for gravityForce
-  gravityForce = new GravityBehavior(grav);                      //sets up the gravity force
-  physics.addBehavior(gravityForce);                             //adds gravity force to particle system
-  attractors = new ArrayList<Attractor>();                       //create arraylist of attractors
-  circles = new ArrayList<Circle>();                             //create the ArrayList of circles
+  controllers();                                           //comment this line out once force coefficients are determined
+  lastTimeCheck = millis();                                //used for Circle production timer
+  tspsReceiver= new TSPS(this, 12000);                     //set up UDP port for TSPS
+  physics = new VerletPhysics2D();                         //set up physics "world"
+  grav= new Vec2D(0, gravY);                               //set up gravity vector for gravityForce
+  gravityForce = new GravityBehavior(grav);                //sets up the gravity force
+  physics.addBehavior(gravityForce);                       //adds gravity force to particle system
+  attractors = new ArrayList<Attractor>();                 //create arraylist of attractors
+  circles = new ArrayList<Circle>();                       //create the ArrayList of circles
 }
 
 
@@ -50,9 +53,11 @@ void setup() {
 
 void draw() {
   background(255);
-  gravityForce.setForce(grav.set(0, gravY));                     //update gravityForce
-  physics.setDrag(drag);                                         //update drag
-  physics.update ();                                             //update the physics world
+  fill(cp.getColorValue());
+  rect(0,0,width,height);
+  gravityForce.setForce(grav.set(0, gravY));               //update gravityForce
+  physics.setDrag(drag);                                   //update drag
+  physics.update ();                                       //update the physics world
 
   //Circle creation 
   if (millis() > lastTimeCheck + timeIntervalFlag) {
@@ -140,13 +145,17 @@ void draw() {
   text ("behaviors: " + physics.behaviors.size(), 100, 15);
   text("circles: " + circles.size(), 200, 15);
   text ("framerate: " + frameRate, 300, 15);
+  
+  hideControls();
 }
 
 
 // use this function to calibrate force coefficients in real time 
 void controllers() {
-  //slider control for gravity
+  
   cp5 = new ControlP5(this);
+  
+  //slider control for gravity
   cp5.addSlider("gravY")
     .setPosition(10, 20)
       .setRange(0.0, 0.2)
@@ -155,8 +164,7 @@ void controllers() {
             .setCaptionLabel("gravity")
               ;
 
-  //slider control for drag
-  cp5 = new ControlP5(this);
+  //slider control for drag 
   cp5.addSlider("drag")
     .setPosition(10, 35)
       .setRange(0.0, 0.2)
@@ -165,12 +173,25 @@ void controllers() {
             ;
 
   //slider control for attractor strength
-  cp5 = new ControlP5(this);
   cp5.addSlider("attStrength")
     .setPosition(10, 50)
       .setRange(0.0, 0.2)
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             ;
+    
+   //background color        
+   cp = cp5.addColorPicker("picker")
+          .setPosition(10, 65)
+          .setColorValue(color(255, 255, 255, 255))
+          .hideBar()
+          ;
+         
+}
+
+void hideControls(){
+  if(keyPressed){
+    cp5.show();
+  } else {cp5.hide();}
 }
 
