@@ -13,6 +13,7 @@ VerletPhysics2D physics;      //initiate instance of physics library
 TSPS tspsReceiver;            //initiate instance of TSPS library
 ControlP5 cp5;                //initiate instance of ControlP5 library
 ColorPicker cp;
+//ColorPicker cp1;
 
 
 
@@ -30,6 +31,8 @@ float attStrength = 0.1;            //initial attraction coeff
 
 GravityBehavior gravityForce;       //initiate gravityForce (toxiclibs)
 Vec2D grav;                         //initiate gravity Vec2D (toxiclibs)
+
+int peopleLength;
 
 // ----------------------- SETUP -------------------------- 
 
@@ -54,7 +57,7 @@ void setup() {
 void draw() {
   background(255);
   fill(cp.getColorValue());
-  rect(0,0,width,height);
+  rect(0, 0, width, height);
   gravityForce.setForce(grav.set(0, gravY));               //update gravityForce
   physics.setDrag(drag);                                   //update drag
   physics.update ();                                       //update the physics world
@@ -88,7 +91,8 @@ void draw() {
   TSPSPerson[] people = tspsReceiver.getPeopleArray();
 
   Vec2D personLoc = new Vec2D(0, 0);
-  
+  peopleLength = people.length;
+
   //add attractors
   for (int i = attractors.size(); i < people.length; i++) {
     TSPSPerson person = people[i];
@@ -135,26 +139,16 @@ void draw() {
   println("people: " + people.length); 
   println("behaviors" + physics.behaviors.size()); 
 
-  //stats and controls
-  fill(255, 255, 0);
-  noStroke();
-  rect(0, 0, width, 20);
 
-  fill(0, 255);
-  text("people: " + people.length, 10, 15); 
-  text ("behaviors: " + physics.behaviors.size(), 100, 15);
-  text("circles: " + circles.size(), 200, 15);
-  text ("framerate: " + frameRate, 300, 15);
-  
   hideControls();
 }
 
 
 // use this function to calibrate force coefficients in real time 
 void controllers() {
-  
+
   cp5 = new ControlP5(this);
-  
+
   //slider control for gravity
   cp5.addSlider("gravY")
     .setPosition(10, 20)
@@ -179,19 +173,34 @@ void controllers() {
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             ;
-    
-   //background color        
-   cp = cp5.addColorPicker("picker")
-          .setPosition(10, 65)
-          .setColorValue(color(255, 255, 255, 255))
-          .hideBar()
+
+  //background color        
+  cp = cp5.addColorPicker("picker")
+    .setPosition(10, 65)
+      .setColorValue(color(255, 255, 255, 255))
+        .hideBar()
           ;
-         
+
+  
 }
 
-void hideControls(){
-  if(keyPressed){
+//hide and show controls
+void hideControls() {
+  if (keyPressed) {
     cp5.show();
-  } else {cp5.hide();}
+    //stats and controls
+    fill(255, 255, 0);
+    noStroke();
+    rect(0, 0, width, 20);
+
+    fill(0, 255);
+    text("people: " + peopleLength, 10, 15); 
+    text ("behaviors: " + physics.behaviors.size(), 100, 15);
+    text("circles: " + circles.size(), 200, 15);
+    text ("framerate: " + frameRate, 300, 15);
+  } 
+  else {
+    cp5.hide();
+  }
 }
 
