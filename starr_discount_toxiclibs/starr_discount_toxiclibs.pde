@@ -8,6 +8,11 @@ import toxi.geom.*;
 import java.util.Iterator;
 import tsps.*;
 import controlP5.*;
+import codeanticode.syphon.*;
+
+
+PGraphics pg;
+SyphonServer server;
 
 VerletPhysics2D physics;      //initiate instance of physics library
 TSPS tspsReceiver;            //initiate instance of TSPS library
@@ -38,6 +43,8 @@ int peopleLength;
 
 void setup() {
   size(displayWidth, displayWidth/2, P2D);
+  pg = createGraphics(width, height, P2D);
+  server = new SyphonServer(this, "Processing Mover");
   frameRate(30);
   controllers();                                           //comment this line out once force coefficients are determined
   lastTimeCheck = millis();                                //used for Circle production timer
@@ -56,8 +63,11 @@ void setup() {
 
 void draw() {
   background(255);
-  fill(cp.getColorValue());
-  rect(0, 0, width, height);
+  pg.beginDraw();
+   pg.fill(255);
+  pg.rect(0,0, width*2, height*2);
+  pg.fill(cp.getColorValue());
+  pg.rect(0, 0, width, height);
   gravityForce.setForce(grav.set(0, gravY));               //update gravityForce
   physics.setDrag(drag);                                   //update drag
   physics.update ();                                       //update the physics world
@@ -139,7 +149,10 @@ void draw() {
   println("people: " + people.length); 
   println("behaviors" + physics.behaviors.size()); 
 
-
+  
+  pg.endDraw();
+  image(pg, 640, 480);
+  server.sendImage(pg);
   hideControls();
 }
 
@@ -180,8 +193,6 @@ void controllers() {
       .setColorValue(color(255, 255, 255, 255))
         .hideBar()
           ;
-
-  
 }
 
 //hide and show controls
@@ -189,7 +200,7 @@ void hideControls() {
   if (keyPressed) {
     cp5.show();
     //stats and controls
-    fill(255,255,0, 200);
+    fill(255, 255, 0, 200);
     noStroke();
     rect(0, 0, 300, 300);
 
