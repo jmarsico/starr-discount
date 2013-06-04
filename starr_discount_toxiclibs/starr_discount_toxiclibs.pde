@@ -26,9 +26,13 @@ int attractorKillTime = 6000;
 ArrayList<Circle> circles;           //initiate an ArrayList of Circle objects
 ArrayList<Attractor> attractors;     //initiate an ArrayList of Attractor objects
 
-float gravY = 0.07;                 //initial gravity coeff
-float drag = 0.01;                   //initial drag coeff
-float attStrength = 0.1;            //initial attraction coeff
+float gravY = 0.10;                 //initial gravity coeff
+float wind;
+float windIncrement= 0.005;
+float maxWind = 0.15;
+float drag = 0.03;                   //initial drag coeff
+float attStrength = 0.15;            //initial attraction coeff
+float t = 0;
 
 GravityBehavior gravityForce;       //initiate gravityForce (toxiclibs)
 Vec2D grav;                         //initiate gravity Vec2D (toxiclibs)
@@ -44,7 +48,8 @@ void setup() {
   lastTimeCheck = millis();                                //used for Circle production timer
   tspsReceiver= new TSPS(this, 12000);                     //set up UDP port for TSPS
   physics = new VerletPhysics2D();                         //set up physics "world"
-  grav= new Vec2D(0, gravY);                               //set up gravity vector for gravityForce
+  wind = 0;
+  grav= new Vec2D(wind, gravY);                               //set up gravity vector for gravityForce
   gravityForce = new GravityBehavior(grav);                //sets up the gravity force
   physics.addBehavior(gravityForce);                       //adds gravity force to particle system
   attractors = new ArrayList<Attractor>();                 //create arraylist of attractors
@@ -59,7 +64,8 @@ void draw() {
   background(255);
   fill(cp.getColorValue());
   rect(0, 0, width, height);
-  gravityForce.setForce(grav.set(0, gravY));               //update gravityForce
+  windUpdate();
+  gravityForce.setForce(grav.set(wind, gravY));               //update gravityForce
   physics.setDrag(drag);                                   //update drag
   physics.update ();                                       //update the physics world
 
@@ -118,6 +124,7 @@ void draw() {
   //remove attractors
   for (int i = attractors.size() -1; i > people.length; i --) {
     Attractor a = attractors.get(i);
+    a.killBurst();
     attractors.remove(a);
   }
 
@@ -174,6 +181,14 @@ void controllers() {
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             ;
+            
+  //slider control for max wind speed
+  cp5.addSlider("maxWind")
+    .setPosition(10, 5)
+      .setRange(0.0, 0.25)
+        .setSize(200, 10)
+          .setColorCaptionLabel(0)
+            ;
 
   //background color        
   cp = cp5.addColorPicker("picker")
@@ -181,8 +196,6 @@ void controllers() {
       .setColorValue(color(255, 255, 255, 255))
         .hideBar()
           ;
-
-  
 }
 
 //hide and show controls
@@ -190,7 +203,7 @@ void hideControls() {
   if (keyPressed) {
     cp5.show();
     //stats and controls
-    fill(255,255,0, 200);
+    fill(255, 255, 0, 200);
     noStroke();
     rect(0, 0, 300, 300);
 
@@ -204,5 +217,17 @@ void hideControls() {
   else {
     cp5.hide();
   }
+}
+
+
+//changes wind direction 
+void windUpdate() {
+  
+  float n = noise(t);
+  wind = map(n, 0, 1, maxWind*-1, maxWind);
+    t+=windIncrement;
+
+  println(wind);
+  
 }
 

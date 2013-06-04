@@ -17,6 +17,11 @@ class Attractor {
     return atta;
   }
 
+  void killBurst() {
+    atta.setStrength(-100.0);
+  }
+
+
   //update the location of the attraction behavior
   void update(float x, float y) {
     location.set(x, y);
