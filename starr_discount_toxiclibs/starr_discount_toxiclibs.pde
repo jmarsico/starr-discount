@@ -200,21 +200,27 @@ void controllers() {
 
 //hide and show controls
 void hideControls() {
-  if (keyPressed) {
+  
+  if (keyPressed && (key == ' ')) {
+   
+    
+    
     cp5.show();
     //stats and controls
-    fill(255, 255, 0, 200);
+    fill(0, 100);
     noStroke();
     rect(0, 0, 300, 300);
 
-    fill(0);
+    fill(255);
     textSize(25 );
+    text("windSpeed: " + String.format("%.2f", wind), 10, 150);
     text("people: " + peopleLength, 10, 180); 
     text ("behaviors: " + physics.behaviors.size(), 10, 210);
     text("circles: " + circles.size(), 10, 240);
     text ("framerate: " + frameRate, 10, 270);
-  } 
-  else {
+    }
+  
+ else {
     cp5.hide();
   }
 }
