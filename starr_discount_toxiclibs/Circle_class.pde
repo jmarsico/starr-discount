@@ -56,34 +56,34 @@ class Circle extends VerletParticle2D {
   
   //draw the object
   void display() {
-    pg.ellipseMode(CENTER);
+    ellipseMode(CENTER);
 
 
     //draw the circle of circles
-    pg.fill(c, pulseAlpha - fade);
-    pg.noStroke();
+    fill(c, pulseAlpha - fade);
+    noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
       float _x = x + (cos(ringAngle) * r);
       float _y = y + (sin(ringAngle) * r);
-      pg.ellipse(_x, _y, 5, 5);
+      ellipse(_x, _y, 5, 5);
     }
 
     //inner circle
-    pg.fill(c, circAlpha - fade);
-    pg.noStroke();
-    pg.ellipse(x, y, r, r);
+    fill(c, circAlpha - fade);
+    noStroke();
+    ellipse(x, y, r, r);
 
     //rings
-    pg.noFill();
-    pg.stroke(0, ringAlpha - fade);
-    pg.ellipse(x, y, r + 10, r + 10);
+    noFill();
+    stroke(0, ringAlpha - fade);
+    ellipse(x, y, r + 10, r + 10);
 
-    pg.strokeWeight(strokewt);
-    pg.ellipse(x, y, r + 12, r + 12);  
-    pg.ellipse(x, y, r + 16, r +16);    
-    pg.ellipse(x, y, r + 30, r + 30);
-    pg.ellipse(x, y, r + 45, r + 45);
+    strokeWeight(strokewt);
+    ellipse(x, y, r + 12, r + 12);  
+    ellipse(x, y, r + 16, r +16);    
+    ellipse(x, y, r + 30, r + 30);
+    ellipse(x, y, r + 45, r + 45);
   }
 }
 
