@@ -13,9 +13,6 @@ VerletPhysics2D physics;      //initiate instance of physics library
 TSPS tspsReceiver;            //initiate instance of TSPS library
 ControlP5 cp5;                //initiate instance of ControlP5 library
 ColorPicker cp;
-//ColorPicker cp1;
-
-
 
 
 //used for timed Circle object generator
