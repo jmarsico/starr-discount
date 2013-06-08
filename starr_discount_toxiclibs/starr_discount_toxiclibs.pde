@@ -38,11 +38,13 @@ GravityBehavior gravityForce;       //initiate gravityForce (toxiclibs)
 Vec2D grav;                         //initiate gravity Vec2D (toxiclibs)
 
 int peopleLength;
+int sideLength = 520;
+int centerLength = 1200;
 
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayWidth/2, P2D);
+  size(sideLength + centerLength, displayWidth/2, P2D);
   pg = createGraphics(width, height, P2D);
   server = new SyphonServer(this, "Processing Mover");
   frameRate(30);
@@ -63,11 +65,16 @@ void setup() {
 
 void draw() {
   background(255);
+ 
   pg.beginDraw();
+
    pg.fill(255);
   pg.rect(0,0, width*2, height*2);
   pg.fill(cp.getColorValue());
   pg.rect(0, 0, width, height);
+     pg.fill(0);
+  pg.line(sideLength, 0, sideLength, height);
+  pg.line(width-sideLength, 0, width-sideLength, height);
   gravityForce.setForce(grav.set(0, gravY));               //update gravityForce
   physics.setDrag(drag);                                   //update drag
   physics.update ();                                       //update the physics world

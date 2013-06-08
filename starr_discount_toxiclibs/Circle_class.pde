@@ -26,8 +26,8 @@ class Circle extends VerletParticle2D {
     physics.addParticle(this);
     pulseRate = random(6, 10);
     float colorChoser = random(0, 1.0);
-    pulseAlpha = 200;
-    circAlpha = 150;
+    pulseAlpha = 255;
+    circAlpha = 255;
     ringAlpha = 255;
     age = 0;
 
@@ -57,6 +57,7 @@ class Circle extends VerletParticle2D {
   //draw the object
   void display() {
     pg.ellipseMode(CENTER);
+    c = 0;
 
 
     //draw the circle of circles
