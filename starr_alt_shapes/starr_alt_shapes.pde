@@ -39,7 +39,7 @@ int peopleLength;
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayWidth/2);
+  size(displayWidth, displayHeight);
   frameRate(50);
   controllers();                                           //comment this line out once force coefficients are determined
   lastTimeCheck = millis();                                //used for Circle production timer

@@ -25,18 +25,18 @@ class Circle extends VerletParticle2D {
     super(loc);
     r = random(2,20);
     physics.addParticle(this);
-    pulseRate = random(6, 10);
+    pulseRate = random(10, 15);
     float colorChoser = random(0, 1.0);
     pulseAlpha = 200;
     circAlpha = 150;
     ringAlpha = 255;
     age = 0;
-    v1 = random(-10, 10);
-    v2 = random(-10, 10);
-    v3 = random(-10, 10);
-    v4 = random(-10, 10);
-    v5 = random(-10, 10);
-    v6 = random(-10, 10);
+    v1 = random(-4, 4);
+    v2 = random(-4, 4);
+    v3 = random(-4, 4);
+    v4 = random(-4, 4);
+    v5 = random(-4, 4);
+    v6 = random(-4, 4);
     
     
 
@@ -70,15 +70,15 @@ class Circle extends VerletParticle2D {
    noFill();
    
    
-    stroke(0, ringAlpha - fade);
+    stroke(255, ringAlpha - fade);
 
     
     beginShape();
-    vertex(x,y);
+    vertex(x+r, y+r);
     vertex(x+(v1*r), y +(v2+r));
     vertex(x+v3*r, y + (v4+r));
     vertex(x+v5, y +v6*r);
-    endShape();
+    endShape(CLOSE);
 
 
     //draw the circle of circles
