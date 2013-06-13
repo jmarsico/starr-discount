@@ -39,8 +39,8 @@ int peopleLength;
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayWidth/2, P2D);
-  frameRate(30);
+  size(displayWidth, displayWidth/2);
+  frameRate(50);
   controllers();                                           //comment this line out once force coefficients are determined
   lastTimeCheck = millis();                                //used for Circle production timer
   tspsReceiver= new TSPS(this, 12000);                     //set up UDP port for TSPS

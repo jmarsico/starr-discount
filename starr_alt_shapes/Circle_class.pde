@@ -18,6 +18,7 @@ class Circle extends VerletParticle2D {
   int age;
   int fade;
   int ageThreshold = 5000;
+  float v1, v2, v3, v4, v5, v6;
 
 
   Circle(Vec2D loc) {
@@ -30,6 +31,14 @@ class Circle extends VerletParticle2D {
     circAlpha = 150;
     ringAlpha = 255;
     age = 0;
+    v1 = random(-10, 10);
+    v2 = random(-10, 10);
+    v3 = random(-10, 10);
+    v4 = random(-10, 10);
+    v5 = random(-10, 10);
+    v6 = random(-10, 10);
+    
+    
 
     if (colorChoser < 0.3) {
       c = #75D19D;
@@ -52,37 +61,31 @@ class Circle extends VerletParticle2D {
     if (age > ageThreshold) {
       fade +=5;
     }
+    
+ 
   }
   
   //draw the object
   void display() {
-    ellipseMode(CENTER);
+   noFill();
+   
+   
+    stroke(0, ringAlpha - fade);
+
+    
+    beginShape();
+    vertex(x,y);
+    vertex(x+(v1*r), y +(v2+r));
+    vertex(x+v3*r, y + (v4+r));
+    vertex(x+v5, y +v6*r);
+    endShape();
+
 
     //draw the circle of circles
-    fill(c, pulseAlpha - fade);
-    noStroke();
-    for (int deg = 0; deg < 360; deg += spacing) {
-      float ringAngle = radians(deg);
-      float _x = x + (cos(ringAngle) * r);
-      float _y = y + (sin(ringAngle) * r);
-      ellipse(_x, _y, 5, 5);
-    }
+    
 
-    //inner circle
-    fill(c, circAlpha - fade);
-    noStroke();
-    ellipse(x, y, r, r);
-
-    //rings
-    noFill();
-    stroke(0, ringAlpha - fade);
-    ellipse(x, y, r + 10, r + 10);
-
-    strokeWeight(strokewt);
-    ellipse(x, y, r + 12, r + 12);  
-    ellipse(x, y, r + 16, r +16);    
-    ellipse(x, y, r + 30, r + 30);
-    ellipse(x, y, r + 45, r + 45);
+   
+    
   }
 }
 
