@@ -39,7 +39,7 @@ int peopleLength;
 // ----------------------- SETUP -------------------------- 
 
 void setup() {
-  size(displayWidth, displayHeight);
+  size(displayWidth, displayHeight-100);
   frameRate(50);
   controllers();                                           //comment this line out once force coefficients are determined
   lastTimeCheck = millis();                                //used for Circle production timer
@@ -69,7 +69,7 @@ void draw() {
   //Circle creation 
   if (millis() > lastTimeCheck + timeIntervalFlag) {
     lastTimeCheck = millis();
-    circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
+    circles.add(new Circle(new Vec2D(random(0, width), random(-100, 0))));
   }
 
   //update and display circles

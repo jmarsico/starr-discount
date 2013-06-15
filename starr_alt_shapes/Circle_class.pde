@@ -10,6 +10,8 @@ class Circle extends VerletParticle2D {
   float aVelocity = 0;
   float aAcceleration = 0.01;
   float r;
+  float r1;
+  float r2;
   float strokewt= 0.3;
   float pulseRate;
   float spacing = 20; 
@@ -17,13 +19,15 @@ class Circle extends VerletParticle2D {
   float pulseAlpha, circAlpha, ringAlpha;
   int age;
   int fade;
-  int ageThreshold = 5000;
+  int ageThreshold = 7000;
   float v1, v2, v3, v4, v5, v6;
 
 
   Circle(Vec2D loc) {
     super(loc);
     r = random(2,20);
+    r1 = random(1, 30);
+    r2 = random(1, 40);
     physics.addParticle(this);
     pulseRate = random(10, 15);
     float colorChoser = random(0, 1.0);
@@ -55,6 +59,8 @@ class Circle extends VerletParticle2D {
   void circUpdate() {
     //update the radius
     r = r + sin(frameCount/pulseRate);
+    r1 = r1 + cos(frameCount/(pulseRate+1));
+    r2 = r2 +cos(frameCount/(pulseRate-2));
 
     //update the age and fade coefficient
     age+=10;
@@ -70,14 +76,14 @@ class Circle extends VerletParticle2D {
    noFill();
    
    
-    stroke(255, ringAlpha - fade);
+    stroke(c, ringAlpha - fade);
 
     
     beginShape();
     vertex(x+r, y+r);
-    vertex(x+(v1*r), y +(v2+r));
-    vertex(x+v3*r, y + (v4+r));
-    vertex(x+v5, y +v6*r);
+    vertex(x+(v1+r1), y +(v2+r));
+    vertex(x+v3*r2, y + (v4+r1));
+    vertex(x+v5*r, y +v6*r2);
     endShape(CLOSE);
 
 
