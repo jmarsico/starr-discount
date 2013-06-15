@@ -20,7 +20,7 @@ class Circle extends VerletParticle2D {
   int age;
   int fade;
   int ageThreshold = 7000;
-  float v1, v2, v3, v4, v5, v6;
+  float v1, v2, v3, v4, v5, v6, v7, v8;
 
 
   Circle(Vec2D loc) {
@@ -41,6 +41,8 @@ class Circle extends VerletParticle2D {
     v4 = random(-4, 4);
     v5 = random(-4, 4);
     v6 = random(-4, 4);
+    v7 = random(-4, 4);
+    v8 = random(-4, 4);
     
     
 
@@ -84,6 +86,7 @@ class Circle extends VerletParticle2D {
     vertex(x+(v1+r1), y +(v2+r));
     vertex(x+v3*r2, y + (v4+r1));
     vertex(x+v5*r, y +v6*r2);
+    vertex(x+v7*r, y +v8*r2);
     endShape(CLOSE);
 
 
