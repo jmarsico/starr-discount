@@ -18,7 +18,7 @@ ColorPicker cp;
 //used for timed Circle object generator
 int lastTimeCheck;
 int timeIntervalFlag = 100;
-int attractorKillTime = 6000;
+
 
 ArrayList<Circle> circles;           //initiate an ArrayList of Circle objects
 ArrayList<Attractor> attractors;     //initiate an ArrayList of Attractor objects
@@ -30,6 +30,7 @@ float maxWind = 0.15;
 float drag = 0.03;                   //initial drag coeff
 float attStrength = 0.15;            //initial attraction coeff
 float t = 0;
+float deathAge = 8000;
 
 GravityBehavior gravityForce;       //initiate gravityForce (toxiclibs)
 Vec2D grav;                         //initiate gravity Vec2D (toxiclibs)
@@ -51,6 +52,10 @@ void setup() {
   physics.addBehavior(gravityForce);                       //adds gravity force to particle system
   attractors = new ArrayList<Attractor>();                 //create arraylist of attractors
   circles = new ArrayList<Circle>();                       //create the ArrayList of circles
+
+  for (int i = 0; i < 150; i ++) {
+    circles.add(new Circle(new Vec2D(random(0, width), random(-height, height))));
+  }
 }
 
 
@@ -66,28 +71,23 @@ void draw() {
   physics.setDrag(drag);                                   //update drag
   physics.update ();                                       //update the physics world
 
-  //Circle creation 
-  if (millis() > lastTimeCheck + timeIntervalFlag) {
-    lastTimeCheck = millis();
-    circles.add(new Circle(new Vec2D(random(0, width), random(-400, 0))));
-  }
 
   //update and display circles
   for (Circle c: circles) { 
     c.circUpdate();
     c.display();
+    if (c.y > (height + 20)) {
+      c.lock();
+      c.set(random(width), random(-height, -40));
+      c.unlock();
+    }else if (c.age > deathAge){
+      c.lock();
+      c.set(random(width), random(-height, -40));
+      c.unlock();
+    }
   }
 
-  //remove circles that are off the screen or older than six seconds
-  for (int i = circles.size() -1; i >=0; i --) {
-    Circle c = circles.get(i);
-    if (c.age > attractorKillTime) {
-      circles.remove(c);
-    }
-    else if (c.y > height + 30) {
-      circles.remove(c);
-    }
-  }
+  
 
   // -------------------- person tracking section ---------------------
 
@@ -178,7 +178,7 @@ void controllers() {
         .setSize(200, 10)
           .setColorCaptionLabel(0)
             ;
-            
+
   //slider control for max wind speed
   cp5.addSlider("maxWind")
     .setPosition(10, 5)
@@ -197,11 +197,11 @@ void controllers() {
 
 //hide and show controls
 void hideControls() {
-  
+
   if (keyPressed && (key == ' ')) {
-   
-    
-    
+
+
+
     cp5.show();
     //stats and controls
     fill(0, 100);
@@ -215,9 +215,9 @@ void hideControls() {
     text ("behaviors: " + physics.behaviors.size(), 10, 210);
     text("circles: " + circles.size(), 10, 240);
     text ("framerate: " + frameRate, 10, 270);
-    }
-  
- else {
+  }
+
+  else {
     cp5.hide();
   }
 }
@@ -225,12 +225,11 @@ void hideControls() {
 
 //changes wind direction 
 void windUpdate() {
-  
+
   float n = noise(t);
   wind = map(n, 0, 1, maxWind*-1, maxWind);
-    t+=windIncrement;
+  t+=windIncrement;
 
   println(wind);
-  
 }
 

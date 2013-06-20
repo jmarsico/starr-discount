@@ -16,13 +16,14 @@ class Circle extends VerletParticle2D {
   color c;
   float pulseAlpha, circAlpha, ringAlpha;
   int age;
+  int birthTime;
   int fade;
   int ageThreshold = 5000;
 
 
   Circle(Vec2D loc) {
     super(loc);
-    r = random(2,20);
+    r = random(2, 20);
     physics.addParticle(this);
     pulseRate = random(6, 10);
     float colorChoser = random(0, 1.0);
@@ -30,6 +31,7 @@ class Circle extends VerletParticle2D {
     circAlpha = 150;
     ringAlpha = 255;
     age = 0;
+    birthTime = 0;
 
     if (colorChoser < 0.3) {
       c = #75D19D;
@@ -42,48 +44,56 @@ class Circle extends VerletParticle2D {
     }
   }
 
-  
+
   void circUpdate() {
     //update the radius
     r = r + sin(frameCount/pulseRate);
 
-    //update the age and fade coefficient
-    age+=10;
-    if (age > ageThreshold) {
-      fade +=5;
+    int m = millis();
+    age = m - birthTime;
+    if (y < 0) {
+      age = 0;
+      birthTime = millis();
+    }
+    
+    if(age > (8255)){
+      fade++;
     }
   }
-  
-  //draw the object
-  void display() {
-    ellipseMode(CENTER);
 
 
-    //draw the circle of circles
-    fill(c, pulseAlpha - fade);
-    noStroke();
-    for (int deg = 0; deg < 360; deg += spacing) {
-      float ringAngle = radians(deg);
-      float _x = x + (cos(ringAngle) * r);
-      float _y = y + (sin(ringAngle) * r);
-      ellipse(_x, _y, 5, 5);
+
+
+    //draw the object
+    void display() {
+      ellipseMode(CENTER);
+
+
+      //draw the circle of circles
+      fill(c, pulseAlpha - fade);
+      noStroke();
+      for (int deg = 0; deg < 360; deg += spacing) {
+        float ringAngle = radians(deg);
+        float _x = x + (cos(ringAngle) * r);
+        float _y = y + (sin(ringAngle) * r);
+        ellipse(_x, _y, 5, 5);
+      }
+
+      //inner circle
+      fill(c, circAlpha - fade);
+      noStroke();
+      ellipse(x, y, r, r);
+
+      //rings
+      noFill();
+      stroke(0, ringAlpha - fade);
+      ellipse(x, y, r + 10, r + 10);
+
+      strokeWeight(strokewt);
+      ellipse(x, y, r + 12, r + 12);  
+      ellipse(x, y, r + 16, r +16);    
+      ellipse(x, y, r + 30, r + 30);
+      ellipse(x, y, r + 45, r + 45);
     }
-
-    //inner circle
-    fill(c, circAlpha - fade);
-    noStroke();
-    ellipse(x, y, r, r);
-
-    //rings
-    noFill();
-    stroke(0, ringAlpha - fade);
-    ellipse(x, y, r + 10, r + 10);
-
-    strokeWeight(strokewt);
-    ellipse(x, y, r + 12, r + 12);  
-    ellipse(x, y, r + 16, r +16);    
-    ellipse(x, y, r + 30, r + 30);
-    ellipse(x, y, r + 45, r + 45);
   }
-}
 
