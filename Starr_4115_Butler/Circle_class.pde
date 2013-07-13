@@ -24,15 +24,9 @@ class Circle extends VerletParticle2D {
     physics.addParticle(this);
     pulseRate = random(6, 10);
     float colorChoser = random(0, 1.0);
-<<<<<<< HEAD:starr_discount_toxiclibs/Circle_class.pde
-    pulseAlpha = 255;
-    circAlpha = 255;
-    ringAlpha = 255;
-=======
     pulseAlpha = 200;
     circAlpha = 150;
     ringAlpha = 200;
->>>>>>> noSyphon:Starr_4115_Butler/Circle_class.pde
     age = 0;
     birthTime = 0;
 
@@ -62,35 +56,20 @@ class Circle extends VerletParticle2D {
   
   //draw the object
   void display() {
-    pg.ellipseMode(CENTER);
-    c = 0;
+    ellipseMode(CENTER);
 
 
     //draw the circle of circles
-<<<<<<< HEAD:starr_discount_toxiclibs/Circle_class.pde
-    pg.fill(c, pulseAlpha - fade);
-=======
     fill(c, pulseAlpha);
->>>>>>> noSyphon:Starr_4115_Butler/Circle_class.pde
     noStroke();
     for (int deg = 0; deg < 360; deg += spacing) {
       float ringAngle = radians(deg);
       float _x = x + (cos(ringAngle) * r);
       float _y = y + (sin(ringAngle) * r);
-      pg.ellipse(_x, _y, 5, 5);
+      ellipse(_x, _y, 5, 5);
     }
 
     //inner circle
-<<<<<<< HEAD:starr_discount_toxiclibs/Circle_class.pde
-    pg.fill(c, circAlpha - fade);
-    pg.noStroke();
-    pg.ellipse(x, y, r, r);
-
-    //rings
-    pg.noFill();
-    pg.stroke(0, ringAlpha - fade);
-    pg.ellipse(x, y, r + 10, r + 10);
-=======
     fill(120, circAlpha);
     noStroke();
     ellipse(x, y, r, r);
@@ -99,13 +78,12 @@ class Circle extends VerletParticle2D {
     noFill();
     stroke(100, ringAlpha);
     ellipse(x, y, r + 10, r + 10);
->>>>>>> noSyphon:Starr_4115_Butler/Circle_class.pde
 
-    pg.strokeWeight(strokewt);
-    pg.ellipse(x, y, r + 12, r + 12);  
-    pg.ellipse(x, y, r + 16, r +16);    
-    pg.ellipse(x, y, r + 30, r + 30);
-    pg.ellipse(x, y, r + 45, r + 45);
+    strokeWeight(strokewt);
+    ellipse(x, y, r + 12, r + 12);  
+    ellipse(x, y, r + 16, r +16);    
+    ellipse(x, y, r + 30, r + 30);
+    ellipse(x, y, r + 45, r + 45);
   }
 }
 

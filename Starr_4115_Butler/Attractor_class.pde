@@ -17,6 +17,11 @@ class Attractor {
     return atta;
   }
 
+  void killBurst() {
+    atta.setStrength(-100.0);
+  }
+
+
   //update the location of the attraction behavior
   void update(float x, float y) {
     location.set(x, y);
@@ -24,8 +29,8 @@ class Attractor {
 
   //display the attraction behavior location (disable this function in the main draw() when presenting!!)
   void display() {
-    pg.fill(255, 0, 0);
-    pg.ellipse(location.x, location.y, 10, 10);
+    fill(255, 0, 0);
+    ellipse(location.x, location.y, 10, 10);
   }
 }
 
