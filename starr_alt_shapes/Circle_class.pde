@@ -25,7 +25,7 @@ class Circle extends VerletParticle2D {
 
   Circle(Vec2D loc) {
     super(loc);
-    r = random(2,20);
+    r = random(2, 20);
     r1 = random(1, 30);
     r2 = random(1, 40);
     physics.addParticle(this);
@@ -43,8 +43,8 @@ class Circle extends VerletParticle2D {
     v6 = random(-4, 4);
     v7 = random(-4, 4);
     v8 = random(-4, 4);
-    
-    
+
+
 
     if (colorChoser < 0.3) {
       c = #75D19D;
@@ -57,44 +57,56 @@ class Circle extends VerletParticle2D {
     }
   }
 
-  
+
   void circUpdate() {
-    //update the radius
-    r = r + sin(frameCount/pulseRate);
-    r1 = r1 + cos(frameCount/(pulseRate+1));
-    r2 = r2 +cos(frameCount/(pulseRate-2));
+    /* //update the radius
+     r = r + sin(frameCount/pulseRate);
+     r1 = r1 + cos(frameCount/(pulseRate+1));
+     r2 = r2 +cos(frameCount/(pulseRate-2));
+     //attempting to use perlin noise
+     */
+    float t = 0;
+    float n = noise(t);
+    r = map(n, 0, 1, 0, -20);
+    t+= 0.5;
+
+
+    float t1 = 0;
+    float n1 = noise(t1);
+    r2 = map(n1, 0, 1, 0, -20);
+    t1 += 0.5;
+
+    float t2 = 0;
+    float n2 = noise(t);
+    r1 = map(n2, 0, 1, 0, -20);
+    t2 += 0.5;
 
     //update the age and fade coefficient
     age+=10;
     if (age > ageThreshold) {
       fade +=5;
     }
-    
- 
   }
-  
+
   //draw the object
   void display() {
-   noFill();
-   
-   
+    noFill();
+
+
     stroke(c, ringAlpha - fade);
 
-    
-    beginShape();
+
+    beginShape(TRIANGLE_STRIP);
     vertex(x+r, y+r);
     vertex(x+(v1+r1), y +(v2+r));
     vertex(x+v3*r2, y + (v4+r1));
     vertex(x+v5*r, y +v6*r2);
     vertex(x+v7*r, y +v8*r2);
+    vertex(x+v7*r+3, y +v8*r+20);
     endShape(CLOSE);
 
 
     //draw the circle of circles
-    
-
-   
-    
   }
 }
 
